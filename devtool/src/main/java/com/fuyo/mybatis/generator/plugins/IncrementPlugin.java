@@ -22,8 +22,8 @@ import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.api.dom.xml.Attribute;
-import org.mybatis.generator.api.dom.xml.Element;
 import org.mybatis.generator.api.dom.xml.TextElement;
+import org.mybatis.generator.api.dom.xml.VisitableElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
 import org.mybatis.generator.internal.util.JavaBeansUtil;
@@ -31,11 +31,13 @@ import org.mybatis.generator.internal.util.StringUtility;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * ---------------------------------------------------------------------------
- *
+ * <p>
  * ---------------------------------------------------------------------------
+ *
  * @author: hewei
  * @time:2019/7/4 11:01
  * ---------------------------------------------------------------------------
@@ -74,6 +76,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param warnings
      * @return
      */
@@ -91,6 +94,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param introspectedTable
      */
     @Override
@@ -103,11 +107,11 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
             // 切分
             String[] incrementsColumnsStrs = incrementColumns.split(",");
             for (String incrementsColumnsStr : incrementsColumnsStrs) {
-                IntrospectedColumn column = IntrospectedTableTools.safeGetColumn(introspectedTable, incrementsColumnsStr);
-                if (column == null) {
+                Optional<IntrospectedColumn> column = IntrospectedTableTools.safeGetColumn(introspectedTable, incrementsColumnsStr);
+                if (!column.isPresent()) {
                     warnings.add("itfsw:插件" + IncrementPlugin.class.getTypeName() + "插件没有找到column为" + incrementsColumnsStr.trim() + "的字段！");
                 } else {
-                    incColumns.add(column);
+                    incColumns.add(column.get());
                 }
             }
         }
@@ -115,6 +119,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -127,6 +132,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -139,6 +145,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -151,6 +158,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -163,6 +171,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -175,6 +184,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -188,6 +198,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
     /**
      * Model Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -201,6 +212,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
     /**
      * Model Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -213,6 +225,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -232,7 +245,9 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
             XmlElement choose = new XmlElement("choose");
 
             // 启用增量操作
-            String columnMap = (prefix != null ? prefix : "_parameter.") + FIELD_INC_MAP + "." + MyBatis3FormattingUtilities.escapeStringForMyBatis3(introspectedColumn.getActualColumnName());
+            String columnMap = (prefix != null ? prefix : "_parameter.") + FIELD_INC_MAP + "."
+//                    + MyBatis3FormattingUtilities.escapeStringForMyBatis3(introspectedColumn.getActualColumnName());
+                    + MyBatis3FormattingUtilities.getAliasedEscapedColumnName(introspectedColumn);
             XmlElement whenIncEle = new XmlElement("when");
             whenIncEle.addAttribute(new Attribute("test", columnMap + " != null"));
             TextElement spec = new TextElement(
@@ -264,7 +279,9 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
             XmlElement choose = new XmlElement("choose");
 
             // 启用增量操作
-            String columnMap = (prefix != null ? prefix : "_parameter.") + FIELD_INC_MAP + "." + MyBatis3FormattingUtilities.escapeStringForMyBatis3(introspectedColumn.getActualColumnName());
+            String columnMap = (prefix != null ? prefix : "_parameter.") + FIELD_INC_MAP + "."
+//                    + MyBatis3FormattingUtilities.escapeStringForMyBatis3(introspectedColumn.getActualColumnName());
+                    + MyBatis3FormattingUtilities.getAliasedEscapedColumnName(introspectedColumn);
             XmlElement whenIncEle = new XmlElement("when");
             whenIncEle.addAttribute(new Attribute("test", columnMap + " != null"));
             TextElement spec = new TextElement(
@@ -289,9 +306,9 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 生成增量操作节点(SelectiveEnhancedPlugin)
+     *
      * @param columns
      * @return
-     * @see SelectiveEnhancedPlugin#generateSetsSelective(List, IntrospectedColumn)
      */
     @Override
     public List<XmlElement> generateIncrementSetForSelectiveEnhancedPlugin(List<IntrospectedColumn> columns) {
@@ -304,7 +321,9 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
                         XmlElement when = new XmlElement("when");
 
                         // 需要 inc 的列
-                        String columnMap = "record." + FIELD_INC_MAP + "." + MyBatis3FormattingUtilities.escapeStringForMyBatis3(incColumn.getActualColumnName());
+                        String columnMap = "record." + FIELD_INC_MAP + "."
+//                                + MyBatis3FormattingUtilities.escapeStringForMyBatis3(incColumn.getActualColumnName());
+                                + MyBatis3FormattingUtilities.getAliasedEscapedColumnName(incColumn);
 
                         when.addAttribute(new Attribute("test", "'" + column.getActualColumnName() + "'.toString() == column.value"));
                         when.addElement(new TextElement("${column.escapedColumnName} = ${column.escapedColumnName} "
@@ -324,6 +343,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 判断是否为需要进行增量操作的column
+     *
      * @param column
      * @return
      */
@@ -341,6 +361,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 向topLevelClass 添加必要的操作函数
+     *
      * @param topLevelClass
      * @param introspectedTable
      */
@@ -356,6 +377,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 构建Increment Enum
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -384,7 +406,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
         // 添加增减方法
         Method mInc = JavaElementGeneratorTools.generateMethod(
                 METHOD_INC,
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 new FullyQualifiedJavaType(ENUM_INCREMENT + "." + CLASS_INCREMENT_ITEM),
                 new Parameter(FullyQualifiedJavaType.getObjectInstance(), "value")
         );
@@ -393,7 +415,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
         Method mDec = JavaElementGeneratorTools.generateMethod(
                 METHOD_DEC,
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 new FullyQualifiedJavaType(ENUM_INCREMENT + "." + CLASS_INCREMENT_ITEM),
                 new Parameter(FullyQualifiedJavaType.getObjectInstance(), "value")
         );
@@ -424,6 +446,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 向topLevelClass 添加必要的操作函数
+     *
      * @param topLevelClass
      * @param introspectedTable
      */
@@ -446,7 +469,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
         // 增加自增方法
         Method mIncrement = JavaElementGeneratorTools.generateMethod(
                 METHOD_INCREMENT,
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 topLevelClass.getType(),
                 new Parameter(new FullyQualifiedJavaType(ENUM_INCREMENT + "." + CLASS_INCREMENT_ITEM), "increment")
         );
@@ -459,6 +482,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 有Selective代码生成
+     *
      * @param element
      */
     private void generatedWithSelective(XmlElement element, IntrospectedTable introspectedTable, boolean hasPrefix) {
@@ -470,13 +494,13 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
                 if (ifs.size() > 0) {
                     for (XmlElement xmlElement : ifs) {
                         // 下面为if的text节点
-                        List<Element> textEles = xmlElement.getElements();
+                        List<VisitableElement> textEles = xmlElement.getElements();
                         TextElement textEle = (TextElement) textEles.get(0);
                         String[] strs = textEle.getContent().split("=");
                         String columnName = strs[0].trim();
-                        IntrospectedColumn introspectedColumn = IntrospectedTableTools.safeGetColumn(introspectedTable, columnName);
-                        if (this.supportIncrement(introspectedColumn)) {
-                            XmlElementTools.replaceXmlElement(xmlElement, PluginTools.getHook(IIncrementPluginHook.class).generateIncrementSetSelective(introspectedColumn, hasPrefix ? "record." : null));
+                        Optional<IntrospectedColumn> introspectedColumn = IntrospectedTableTools.safeGetColumn(introspectedTable, columnName);
+                        if (introspectedColumn.isPresent() && this.supportIncrement(introspectedColumn.get())) {
+                            XmlElementTools.replaceXmlElement(xmlElement, PluginTools.getHook(IIncrementPluginHook.class).generateIncrementSetSelective(introspectedColumn.get(), hasPrefix ? "record." : null));
                         }
                     }
                 }
@@ -486,13 +510,14 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 无Selective代码生成
+     *
      * @param xmlElement
      * @param introspectedTable
      * @param hasPrefix
      */
     private void generatedWithoutSelective(XmlElement xmlElement, IntrospectedTable introspectedTable, boolean hasPrefix) {
         for (int i = 0; i < xmlElement.getElements().size(); i++) {
-            Element ele = xmlElement.getElements().get(i);
+            VisitableElement ele = xmlElement.getElements().get(i);
             // 找到text节点且格式为 set xx = xx 或者 xx = xx
             if (ele instanceof TextElement) {
                 String text = ((TextElement) ele).getContent().trim();
@@ -500,10 +525,10 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
                     // 清理 set 操作
                     text = text.replaceFirst("^set\\s", "").trim();
                     String columnName = text.split("=")[0].trim();
-                    IntrospectedColumn introspectedColumn = IntrospectedTableTools.safeGetColumn(introspectedTable, columnName);
+                    Optional<IntrospectedColumn> introspectedColumn = IntrospectedTableTools.safeGetColumn(introspectedTable, columnName);
                     // 查找判断是否需要进行节点替换
-                    if (this.supportIncrement(introspectedColumn)) {
-                        xmlElement.getElements().set(i, PluginTools.getHook(IIncrementPluginHook.class).generateIncrementSet(introspectedColumn, hasPrefix ? "record." : null, text.endsWith(",")));
+                    if (introspectedColumn.isPresent() && this.supportIncrement(introspectedColumn.get())) {
+                        xmlElement.getElements().set(i, PluginTools.getHook(IIncrementPluginHook.class).generateIncrementSet(introspectedColumn.get(), hasPrefix ? "record." : null, text.endsWith(",")));
                     }
                 }
             }
@@ -512,6 +537,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 是否启用了
+     *
      * @return
      */
     private boolean support() {
@@ -520,6 +546,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 生成Increment类
+     *
      * @param introspectedTable
      * @return
      */
@@ -547,7 +574,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
         // 添加构造函数
         Method mConstructor = JavaElementGeneratorTools.generateMethod(
                 CLASS_INCREMENT_ITEM,
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 incCls.getType(),
                 new Parameter(columnField.getType(), FIELD_COLUMN_FOR_CLASS_INCREMENT),
                 new Parameter(operateField.getType(), FIELD_OPERATE_FOR_CLASS_INCREMENT),

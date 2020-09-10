@@ -283,7 +283,7 @@ public class ModelColumnPlugin extends BasePlugin {
         topLevelClass.addImportedType(FullyQualifiedJavaType.getNewArrayListInstance());
         Method mExcludes = JavaElementGeneratorTools.generateMethod(
                 METHOD_EXCLUDES,
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 new FullyQualifiedJavaType(ENUM_NAME + "[]"),
                 new Parameter(innerEnum.getType(), "excludes", true)
         );
@@ -303,7 +303,7 @@ public class ModelColumnPlugin extends BasePlugin {
         // all
         Method mAll = JavaElementGeneratorTools.generateMethod(
                 METHOD_ALL,
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 new FullyQualifiedJavaType(ENUM_NAME + "[]")
         );
         commentGenerator.addGeneralMethodComment(mAll, introspectedTable);
@@ -316,7 +316,7 @@ public class ModelColumnPlugin extends BasePlugin {
         // getEscapedColumnName
         Method mGetAliasame = JavaElementGeneratorTools.generateMethod(
                 "withAlias",
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 FullyQualifiedJavaType.getStringInstance()
         );
         commentGenerator.addGeneralMethodComment(mGetAliasame, introspectedTable);
@@ -333,7 +333,7 @@ public class ModelColumnPlugin extends BasePlugin {
         // getEscapedColumnName
         Method mGetAliasAs = JavaElementGeneratorTools.generateMethod(
                 "withAlias",
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 FullyQualifiedJavaType.getStringInstance(),
                 new Parameter(FullyQualifiedJavaType.getStringInstance(), "as")
         );
@@ -353,7 +353,7 @@ public class ModelColumnPlugin extends BasePlugin {
         // getEscapedColumnName
         Method mGetEscapedColumnName = JavaElementGeneratorTools.generateMethod(
                 METHOD_GET_ESCAPED_COLUMN_NAME,
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 FullyQualifiedJavaType.getStringInstance()
         );
         commentGenerator.addGeneralMethodComment(mGetEscapedColumnName, introspectedTable);
@@ -371,7 +371,7 @@ public class ModelColumnPlugin extends BasePlugin {
         // getAliasedEscapedColumnName
         Method mGetAliasedEscapedColumnName = JavaElementGeneratorTools.generateMethod(
                 METHOD_GET_ALIASED_ESCAPED_COLUMN_NAME,
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 FullyQualifiedJavaType.getStringInstance()
         );
         commentGenerator.addGeneralMethodComment(mGetAliasedEscapedColumnName, introspectedTable);

@@ -29,6 +29,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * ---------------------------------------------------------------------------
@@ -87,7 +88,7 @@ public class IntrospectedTableTools {
      * @param columnName
      * @return
      */
-    public static IntrospectedColumn safeGetColumn(IntrospectedTable introspectedTable, String columnName) {
+    public static Optional<IntrospectedColumn> safeGetColumn(IntrospectedTable introspectedTable, String columnName) {
         // columnName
         columnName = columnName.trim();
         // 过滤

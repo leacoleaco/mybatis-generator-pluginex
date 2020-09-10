@@ -17,7 +17,7 @@
 package com.fuyo.mybatis.generator.plugins.utils.hook;
 
 import org.mybatis.generator.api.IntrospectedColumn;
-import org.mybatis.generator.api.dom.xml.Element;
+import org.mybatis.generator.api.dom.xml.VisitableElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 
 import java.util.List;
@@ -38,7 +38,7 @@ public interface IIncrementsPluginHook {
      * @param hasComma
      * @return
      */
-    List<Element> incrementSetElementGenerated(IntrospectedColumn introspectedColumn, String prefix, boolean hasComma);
+    List<VisitableElement> incrementSetElementGenerated(IntrospectedColumn introspectedColumn, String prefix, boolean hasComma);
 
     /**
      * 生成增量操作节点(SelectiveEnhancedPlugin)

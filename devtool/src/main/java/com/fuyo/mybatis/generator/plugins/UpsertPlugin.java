@@ -35,6 +35,7 @@ import java.util.Properties;
  * ---------------------------------------------------------------------------
  * 存在即更新插件
  * ---------------------------------------------------------------------------
+ *
  * @author: hewei
  * @time:2017/3/21 10:59
  * ---------------------------------------------------------------------------
@@ -96,17 +97,18 @@ public class UpsertPlugin extends BasePlugin {
     /**
      * Java Client Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param interfaze
      * @param topLevelClass
      * @param introspectedTable
      * @return
      */
     @Override
-    public boolean clientGenerated(Interface interfaze, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+    public boolean clientGenerated(Interface interfaze, IntrospectedTable introspectedTable) {
         // ====================================== upsert ======================================
         Method mUpsert = JavaElementGeneratorTools.generateMethod(
                 METHOD_UPSERT,
-                JavaVisibility.DEFAULT,
+                true, JavaVisibility.DEFAULT,
                 FullyQualifiedJavaType.getIntInstance(),
                 new Parameter(JavaElementGeneratorTools.getModelTypeWithoutBLOBs(introspectedTable), "record")
         );
@@ -120,7 +122,7 @@ public class UpsertPlugin extends BasePlugin {
         if (introspectedTable.hasBLOBColumns()) {
             Method mUpsertWithBLOBs = JavaElementGeneratorTools.generateMethod(
                     METHOD_UPSERT_WITH_BLOBS,
-                    JavaVisibility.DEFAULT,
+                    true, JavaVisibility.DEFAULT,
                     FullyQualifiedJavaType.getIntInstance(),
                     new Parameter(JavaElementGeneratorTools.getModelTypeWithBLOBs(introspectedTable), "record")
             );
@@ -135,7 +137,7 @@ public class UpsertPlugin extends BasePlugin {
         FullyQualifiedJavaType fullFieldModel = introspectedTable.getRules().calculateAllFieldsClass();
         Method mUpsertSelective = JavaElementGeneratorTools.generateMethod(
                 METHOD_UPSERT_SELECTIVE,
-                JavaVisibility.DEFAULT,
+                true, JavaVisibility.DEFAULT,
                 FullyQualifiedJavaType.getIntInstance(),
                 new Parameter(fullFieldModel, "record")
         );
@@ -151,7 +153,7 @@ public class UpsertPlugin extends BasePlugin {
             // ====================================== upsertByExample ======================================
             Method mUpsertByExample = JavaElementGeneratorTools.generateMethod(
                     METHOD_UPSERT_BY_EXAMPLE,
-                    JavaVisibility.DEFAULT,
+                    true, JavaVisibility.DEFAULT,
                     FullyQualifiedJavaType.getIntInstance(),
                     new Parameter(JavaElementGeneratorTools.getModelTypeWithoutBLOBs(introspectedTable), "record", "@Param(\"record\")"),
                     new Parameter(new FullyQualifiedJavaType(introspectedTable.getExampleType()), "example", "@Param(\"example\")")
@@ -166,7 +168,7 @@ public class UpsertPlugin extends BasePlugin {
             if (introspectedTable.hasBLOBColumns()) {
                 Method mUpsertByExampleWithBLOBs = JavaElementGeneratorTools.generateMethod(
                         METHOD_UPSERT_BY_EXAMPLE_WITH_BLOBS,
-                        JavaVisibility.DEFAULT,
+                        true, JavaVisibility.DEFAULT,
                         FullyQualifiedJavaType.getIntInstance(),
                         new Parameter(JavaElementGeneratorTools.getModelTypeWithBLOBs(introspectedTable), "record", "@Param(\"record\")"),
                         new Parameter(new FullyQualifiedJavaType(introspectedTable.getExampleType()), "example", "@Param(\"example\")")
@@ -180,7 +182,7 @@ public class UpsertPlugin extends BasePlugin {
             // ====================================== upsertByExampleSelective ======================================
             Method mUpsertByExampleSelective = JavaElementGeneratorTools.generateMethod(
                     METHOD_UPSERT_BY_EXAMPLE_SELECTIVE,
-                    JavaVisibility.DEFAULT,
+                    true, JavaVisibility.DEFAULT,
                     FullyQualifiedJavaType.getIntInstance(),
                     new Parameter(introspectedTable.getRules().calculateAllFieldsClass(), "record", "@Param(\"record\")"),
                     new Parameter(new FullyQualifiedJavaType(introspectedTable.getExampleType()), "example", "@Param(\"example\")")
@@ -200,7 +202,7 @@ public class UpsertPlugin extends BasePlugin {
             returnType.addTypeArgument(JavaElementGeneratorTools.getModelTypeWithoutBLOBs(introspectedTable));
             Method mBatchUpsert = JavaElementGeneratorTools.generateMethod(
                     METHOD_BATCH_UPSERT,
-                    JavaVisibility.DEFAULT,
+                    true, JavaVisibility.DEFAULT,
                     FullyQualifiedJavaType.getIntInstance(),
                     new Parameter(returnType, "list", "@Param(\"list\")")
             );
@@ -216,7 +218,7 @@ public class UpsertPlugin extends BasePlugin {
                 returnType.addTypeArgument(JavaElementGeneratorTools.getModelTypeWithBLOBs(introspectedTable));
                 Method mBatchUpsertWithBLOBs = JavaElementGeneratorTools.generateMethod(
                         METHOD_BATCH_UPSERT_WITH_BLOBS,
-                        JavaVisibility.DEFAULT,
+                        true, JavaVisibility.DEFAULT,
                         FullyQualifiedJavaType.getIntInstance(),
                         new Parameter(returnType, "list", "@Param(\"list\")")
                 );
@@ -232,7 +234,7 @@ public class UpsertPlugin extends BasePlugin {
             FullyQualifiedJavaType selectiveType = new FullyQualifiedJavaType(introspectedTable.getRules().calculateAllFieldsClass().getShortName() + "." + ModelColumnPlugin.ENUM_NAME);
             Method mBatchUpsertSelective = JavaElementGeneratorTools.generateMethod(
                     METHOD_BATCH_UPSERT_SELECTIVE,
-                    JavaVisibility.DEFAULT,
+                    true, JavaVisibility.DEFAULT,
                     FullyQualifiedJavaType.getIntInstance(),
                     new Parameter(returnType, "list", "@Param(\"list\")"),
                     new Parameter(selectiveType, "selective", "@Param(\"selective\")", true)
@@ -243,12 +245,13 @@ public class UpsertPlugin extends BasePlugin {
             logger.debug("itfsw(存在即更新插件):" + interfaze.getType().getShortName() + "增加batchUpsertSelective方法。");
         }
 
-        return super.clientGenerated(interfaze, topLevelClass, introspectedTable);
+        return super.clientGenerated(interfaze, introspectedTable);
     }
 
     /**
      * SQL Map Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param document
      * @param introspectedTable
      * @return
@@ -274,6 +277,7 @@ public class UpsertPlugin extends BasePlugin {
 
     /**
      * 批量
+     *
      * @param document
      * @param introspectedTable
      */
@@ -350,6 +354,7 @@ public class UpsertPlugin extends BasePlugin {
 
     /**
      * 批量
+     *
      * @param document
      * @param introspectedTable
      * @param withBLOBs
@@ -369,7 +374,7 @@ public class UpsertPlugin extends BasePlugin {
 
         // insert
         insertEle.addElement(new TextElement("insert into " + introspectedTable.getFullyQualifiedTableNameAtRuntime()));
-        for (Element element : XmlElementGeneratorTools.generateKeys(columns, true)) {
+        for (VisitableElement element : XmlElementGeneratorTools.generateKeys(columns, true)) {
             insertEle.addElement(element);
         }
         insertEle.addElement(new TextElement("values"));
@@ -381,7 +386,7 @@ public class UpsertPlugin extends BasePlugin {
         foreachEle.addAttribute(new Attribute("item", "item"));
         foreachEle.addAttribute(new Attribute("separator", ","));
 
-        for (Element element : XmlElementGeneratorTools.generateValues(columns, "item.", true)) {
+        for (VisitableElement element : XmlElementGeneratorTools.generateValues(columns, "item.", true)) {
             foreachEle.addElement(element);
         }
         insertEle.addElement(new TextElement("on duplicate key update "));
@@ -403,6 +408,7 @@ public class UpsertPlugin extends BasePlugin {
 
     /**
      * 当Selective情况
+     *
      * @param document
      * @param introspectedTable
      */
@@ -484,6 +490,7 @@ public class UpsertPlugin extends BasePlugin {
 
     /**
      * 生成xml
+     *
      * @param document
      * @param introspectedTable
      * @param withBLOBs
@@ -506,16 +513,16 @@ public class UpsertPlugin extends BasePlugin {
 
         // insert
         insertEle.addElement(new TextElement("insert into " + introspectedTable.getFullyQualifiedTableNameAtRuntime()));
-        for (Element element : XmlElementGeneratorTools.generateUpsertKeys(columns, null)) {
+        for (VisitableElement element : XmlElementGeneratorTools.generateUpsertKeys(columns, null)) {
             insertEle.addElement(element);
         }
         insertEle.addElement(new TextElement("values"));
-        for (Element element : XmlElementGeneratorTools.generateUpsertValues(columns, null, true)) {
+        for (VisitableElement element : XmlElementGeneratorTools.generateUpsertValues(columns, null, true)) {
             insertEle.addElement(element);
         }
         insertEle.addElement(new TextElement("on duplicate key update "));
         // set
-        for (Element set : XmlElementGeneratorTools.generateUpsertSets(columns, null)) {
+        for (VisitableElement set : XmlElementGeneratorTools.generateUpsertSets(columns, null)) {
             insertEle.addElement(set);
         }
 
@@ -539,7 +546,7 @@ public class UpsertPlugin extends BasePlugin {
             updateEle.addElement(new TextElement("update " + introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime()));
             updateEle.addElement(new TextElement("set"));
             // set
-            for (Element set : XmlElementGeneratorTools.generateUpsertSets(columns, "record.")) {
+            for (VisitableElement set : XmlElementGeneratorTools.generateUpsertSets(columns, "record.")) {
                 updateEle.addElement(set);
             }
 
@@ -551,7 +558,7 @@ public class UpsertPlugin extends BasePlugin {
 
             // insert
             updateEle.addElement(new TextElement("insert into " + introspectedTable.getFullyQualifiedTableNameAtRuntime()));
-            for (Element element : XmlElementGeneratorTools.generateUpsertKeys(columns, "record.")) {
+            for (VisitableElement element : XmlElementGeneratorTools.generateUpsertKeys(columns, "record.")) {
                 updateEle.addElement(element);
             }
             this.generateExistsClause(introspectedTable, updateEle, XmlElementGeneratorTools.generateUpsertValues(columns, "record.", false));
@@ -564,14 +571,15 @@ public class UpsertPlugin extends BasePlugin {
     /**
      * exists 语句
      * +635
+     *
      * @param introspectedTable
      * @param element
      * @param values
      */
-    private void generateExistsClause(IntrospectedTable introspectedTable, XmlElement element, List<Element> values) {
+    private void generateExistsClause(IntrospectedTable introspectedTable, XmlElement element, List<VisitableElement> values) {
         element.addElement(new TextElement("select"));
 
-        for (Element value : values) {
+        for (VisitableElement value : values) {
             element.addElement(value);
         }
 

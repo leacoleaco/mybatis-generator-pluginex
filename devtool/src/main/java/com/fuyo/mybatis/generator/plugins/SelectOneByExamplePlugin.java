@@ -62,7 +62,7 @@ public class SelectOneByExamplePlugin extends BasePlugin {
         // 方法生成 selectOneByExample
         Method selectOneMethod = JavaElementGeneratorTools.generateMethod(
                 METHOD_SELECT_ONE_BY_EXAMPLE_WITH_BLOBS,
-                JavaVisibility.DEFAULT,
+                true, JavaVisibility.DEFAULT,
                 JavaElementGeneratorTools.getModelTypeWithBLOBs(introspectedTable),
                 new Parameter(new FullyQualifiedJavaType(introspectedTable.getExampleType()), "example")
         );
@@ -90,7 +90,7 @@ public class SelectOneByExamplePlugin extends BasePlugin {
         // 方法生成 selectOneByExample
         Method selectOneMethod = JavaElementGeneratorTools.generateMethod(
                 METHOD_SELECT_ONE_BY_EXAMPLE,
-                JavaVisibility.DEFAULT,
+                true, JavaVisibility.DEFAULT,
                 JavaElementGeneratorTools.getModelTypeWithoutBLOBs(introspectedTable),
                 new Parameter(new FullyQualifiedJavaType(introspectedTable.getExampleType()), "example")
         );

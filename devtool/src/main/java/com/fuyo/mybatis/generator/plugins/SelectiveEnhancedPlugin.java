@@ -36,6 +36,7 @@ import org.mybatis.generator.internal.util.StringUtility;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * ---------------------------------------------------------------------------
@@ -166,14 +167,14 @@ public class SelectiveEnhancedPlugin extends BasePlugin implements IUpsertPlugin
 
         GeneratedKey gk = introspectedTable.getGeneratedKey();
         if (gk != null) {
-            IntrospectedColumn introspectedColumn = introspectedTable.getColumn(gk.getColumn());
+            Optional<IntrospectedColumn> introspectedColumn = introspectedTable.getColumn(gk.getColumn());
             // if the column is null, then it's a configuration error. The
             // warning has already been reported
-            if (introspectedColumn != null) {
+            if (introspectedColumn.isPresent()) {
                 if (gk.isJdbcStandard()) {
                     XmlElementGeneratorTools.useGeneratedKeys(answer, introspectedTable, "record.");
                 } else {
-                    answer.addElement(XmlElementGeneratorTools.getSelectKey(introspectedColumn, gk, "record."));
+                    answer.addElement(XmlElementGeneratorTools.getSelectKey(introspectedColumn.get(), gk, "record."));
                 }
             }
         }

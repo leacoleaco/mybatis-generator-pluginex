@@ -4,13 +4,10 @@ import com.fuyo.mybatis.generator.plugins.utils.BasePlugin;
 import com.fuyo.mybatis.generator.plugins.utils.FormatTools;
 import com.fuyo.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
 import com.fuyo.mybatis.generator.plugins.utils.PluginTools;
-import com.fuyo.mybatis.generator.plugins.utils.enhanced.InnerInterface;
-import com.fuyo.mybatis.generator.plugins.utils.enhanced.InnerInterfaceWrapperToInnerClass;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
-import org.mybatis.generator.internal.util.StringUtility;
 
 import java.util.List;
 
@@ -30,8 +27,6 @@ public class ExampleEnhancedPlugin extends BasePlugin {
     public static final String PRO_ENABLE_AND_IF = "enableAndIf";
     // 是否启用column的操作
     private boolean enableColumnOperate = false;
-    // 是否启用了过期的andIf
-    private boolean enableAndIf;
 
     /**
      * {@inheritDoc}
@@ -43,7 +38,6 @@ public class ExampleEnhancedPlugin extends BasePlugin {
         super.initialized(introspectedTable);
         this.enableColumnOperate = PluginTools.checkDependencyPlugin(context, ModelColumnPlugin.class);
         String enableAndIf = properties.getProperty(PRO_ENABLE_AND_IF);
-        this.enableAndIf = enableAndIf == null ? true : StringUtility.isTrue(enableAndIf);
     }
 
     /**
@@ -62,10 +56,6 @@ public class ExampleEnhancedPlugin extends BasePlugin {
             if ("Criteria".equals(innerClass.getType().getShortName())) {
                 // 工厂方法
                 addFactoryMethodToCriteria(topLevelClass, innerClass, introspectedTable);
-                // andIf
-                if (this.enableAndIf) {
-                    addAndIfMethodToCriteria(topLevelClass, innerClass, introspectedTable);
-                }
                 // when
                 addWhenToCriteria(topLevelClass, innerClass, introspectedTable);
             } else if ("GeneratedCriteria".equals(innerClass.getType().getShortName())) {
@@ -120,7 +110,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
 
         Method joinCriteriaMethod = JavaElementGeneratorTools.generateMethod(
                 "getJoinCriteria",
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 joinCriteriaType
         );
         commentGenerator.addGeneralMethodComment(joinCriteriaMethod, introspectedTable);
@@ -132,7 +122,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
     private void addAddMethodToExample(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         Method joinCriteriaMethod = JavaElementGeneratorTools.generateMethod(
                 "andCriteria",
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 new FullyQualifiedJavaType(topLevelClass.getType().getShortName()),
                 new Parameter(FullyQualifiedJavaType.getObjectInstance(), "criteria")
         );
@@ -158,7 +148,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
     private void addStaticCreateCriteriaMethodToExample(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         Method createCriteriaMethod = JavaElementGeneratorTools.generateMethod(
                 METHOD_NEW_AND_CREATE_CRITERIA,
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 FullyQualifiedJavaType.getCriteriaInstance()
         );
         commentGenerator.addGeneralMethodComment(createCriteriaMethod, introspectedTable);
@@ -192,7 +182,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
         // 方法名
         Method method = JavaElementGeneratorTools.generateMethod(
                 "and",
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 FullyQualifiedJavaType.getCriteriaInstance(),
                 new Parameter(
                         FullyQualifiedJavaType.getStringInstance(),
@@ -222,7 +212,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
         // 方法名
         Method method = JavaElementGeneratorTools.generateMethod(
                 methodName,
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 FullyQualifiedJavaType.getCriteriaInstance(),
                 new Parameter(FullyQualifiedJavaType.getStringInstance(), "exp"),
                 new Parameter(FullyQualifiedJavaType.getObjectInstance(), "value1"),
@@ -286,7 +276,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
 
         Method method = JavaElementGeneratorTools.generateMethod(
                 sb.toString(),
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 FullyQualifiedJavaType.getCriteriaInstance(),
                 new Parameter(
                         new FullyQualifiedJavaType(introspectedTable.getRules().calculateAllFieldsClass().getShortName() + "." + ModelColumnPlugin.ENUM_NAME),
@@ -346,7 +336,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
         // 添加example工厂方法
         Method exampleMethod = JavaElementGeneratorTools.generateMethod(
                 "example",
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 topLevelClass.getType()
         );
         commentGenerator.addGeneralMethodComment(exampleMethod, introspectedTable);
@@ -394,22 +384,23 @@ public class ExampleEnhancedPlugin extends BasePlugin {
         // ICriteriaAdd增加接口add
         Method addMethod = JavaElementGeneratorTools.generateMethod(
                 type,
-                JavaVisibility.DEFAULT,
+                false, JavaVisibility.DEFAULT,
                 null,
                 new Parameter(clazz.getType(), type)
         );
         commentGenerator.addGeneralMethodComment(addMethod, introspectedTable);
+        addMethod.setAbstract(true);
         whenInterface.addMethod(addMethod);
 
-        InnerClass innerClassWrapper = new InnerInterfaceWrapperToInnerClass(whenInterface);
+//        InnerClass innerClassWrapper = new InnerInterfaceWrapperToInnerClass(whenInterface);
         // 添加注释
-        commentGenerator.addClassComment(innerClassWrapper, introspectedTable);
-        topLevelClass.addInnerClass(innerClassWrapper);
+//        commentGenerator.addClassComment(whenInterface, introspectedTable);
+        topLevelClass.addInnerInterface(whenInterface);
 
         // 添加when方法
         Method whenMethod = JavaElementGeneratorTools.generateMethod(
                 "when",
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 clazz.getType(),
                 new Parameter(FullyQualifiedJavaType.getBooleanPrimitiveInstance(), "condition"),
                 new Parameter(whenInterface.getType(), "then")
@@ -425,7 +416,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
         FormatTools.addMethodWithBestPosition(clazz, whenMethod);
         Method whenOtherwiseMethod = JavaElementGeneratorTools.generateMethod(
                 "when",
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 clazz.getType(),
                 new Parameter(FullyQualifiedJavaType.getBooleanPrimitiveInstance(), "condition"),
                 new Parameter(whenInterface.getType(), "then"),
@@ -442,58 +433,6 @@ public class ExampleEnhancedPlugin extends BasePlugin {
                 "return this;"
         );
         FormatTools.addMethodWithBestPosition(clazz, whenOtherwiseMethod);
-    }
-
-    /**
-     * 增强Criteria的链式调用，添加andIf(boolean addIf, CriteriaAdd add)方法，实现链式调用中按条件增加查询语句
-     *
-     * @param topLevelClass
-     * @param innerClass
-     * @param introspectedTable
-     */
-    @Deprecated
-    private void addAndIfMethodToCriteria(TopLevelClass topLevelClass, InnerClass innerClass, IntrospectedTable introspectedTable) {
-        // 添加接口CriteriaAdd
-        InnerInterface criteriaAddInterface = new InnerInterface("ICriteriaAdd");
-        criteriaAddInterface.setVisibility(JavaVisibility.PUBLIC);
-        criteriaAddInterface.addAnnotation("@Deprecated");
-        logger.debug("itfsw(Example增强插件):" + topLevelClass.getType().getShortName() + "." + innerClass.getType().getShortName() + "增加接口ICriteriaAdd");
-
-        // ICriteriaAdd增加接口add
-        Method addMethod = JavaElementGeneratorTools.generateMethod(
-                "add",
-                JavaVisibility.DEFAULT,
-                innerClass.getType(),
-                new Parameter(innerClass.getType(), "add")
-        );
-        commentGenerator.addGeneralMethodComment(addMethod, introspectedTable);
-        FormatTools.addMethodWithBestPosition(criteriaAddInterface, addMethod);
-        logger.debug("itfsw(Example增强插件):" + topLevelClass.getType().getShortName() + "." + innerClass.getType().getShortName() + "." + criteriaAddInterface.getType().getShortName() + "增加方法add");
-
-        InnerClass innerClassWrapper = new InnerInterfaceWrapperToInnerClass(criteriaAddInterface);
-        // 添加注释
-        commentGenerator.addClassComment(innerClassWrapper, introspectedTable);
-        innerClass.addInnerClass(innerClassWrapper);
-
-        // 添加andIf方法
-        Method andIfMethod = JavaElementGeneratorTools.generateMethod(
-                "andIf",
-                JavaVisibility.PUBLIC,
-                innerClass.getType(),
-                new Parameter(FullyQualifiedJavaType.getBooleanPrimitiveInstance(), "ifAdd"),
-                new Parameter(criteriaAddInterface.getType(), "add")
-        );
-        andIfMethod.addAnnotation("@Deprecated");
-        commentGenerator.addGeneralMethodComment(andIfMethod, introspectedTable);
-        andIfMethod = JavaElementGeneratorTools.generateMethodBody(
-                andIfMethod,
-                "if (ifAdd) {",
-                "add.add(this);",
-                "}",
-                "return this;"
-        );
-        FormatTools.addMethodWithBestPosition(innerClass, andIfMethod);
-        logger.debug("itfsw(Example增强插件):" + topLevelClass.getType().getShortName() + "." + innerClass.getType().getShortName() + "增加方法andIf");
     }
 
     /**
@@ -517,7 +456,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
         // 添加 getJoinClause()
         Method getMethod = JavaElementGeneratorTools.generateMethod(
                 "getJoinClause",
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 new FullyQualifiedJavaType("java.lang.String")
         );
         commentGenerator.addGeneralMethodComment(getMethod, introspectedTable);
@@ -536,7 +475,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
     private void addJoinMethod(String joinMethodName, String joinSql, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         Method method1 = JavaElementGeneratorTools.generateMethod(
                 joinMethodName,
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 topLevelClass.getType(),
                 new Parameter(FullyQualifiedJavaType.getStringInstance(), "table"),
                 new Parameter(FullyQualifiedJavaType.getStringInstance(), "on", true)
@@ -583,7 +522,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
         // 添加 getGroupByClause()
         Method getMethod = JavaElementGeneratorTools.generateMethod(
                 "getGroupByClause",
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 new FullyQualifiedJavaType("java.lang.String")
         );
         commentGenerator.addGeneralMethodComment(getMethod, introspectedTable);
@@ -597,7 +536,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
         // 添加groupBy
         Method method = JavaElementGeneratorTools.generateMethod(
                 "groupBy",
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 topLevelClass.getType(),
                 new Parameter(FullyQualifiedJavaType.getStringInstance(), "groupByClause")
         );
@@ -613,7 +552,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
         // 添加groupBy
         Method method1 = JavaElementGeneratorTools.generateMethod(
                 "groupBy",
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 topLevelClass.getType(),
                 new Parameter(FullyQualifiedJavaType.getStringInstance(), "groupByClause", true)
         );
@@ -646,7 +585,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
         // 添加orderBy
         Method orderByMethod = JavaElementGeneratorTools.generateMethod(
                 "orderBy",
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 topLevelClass.getType(),
                 new Parameter(FullyQualifiedJavaType.getStringInstance(), "orderByClause")
         );
@@ -662,7 +601,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
         // 添加orderBy
         Method orderByMethod1 = JavaElementGeneratorTools.generateMethod(
                 "orderBy",
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 topLevelClass.getType(),
                 new Parameter(FullyQualifiedJavaType.getStringInstance(), "orderByClauses", true)
         );

@@ -121,8 +121,8 @@ public class ModelBuilderPlugin extends BasePlugin implements ILombokPluginHook 
         InnerClass innerClass = new InnerClass(BUILDER_CLASS_NAME);
         innerClass.setVisibility(JavaVisibility.PUBLIC);
         innerClass.setStatic(true);
-        if (topLevelClass.getSuperClass() != null) {
-            innerClass.setSuperClass(topLevelClass.getSuperClass().getShortName() + "." + BUILDER_CLASS_NAME);
+        if (topLevelClass.getSuperClass().isPresent()) {
+            innerClass.setSuperClass(topLevelClass.getSuperClass().get().getShortName() + "." + BUILDER_CLASS_NAME);
         }
 
         // 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
@@ -132,7 +132,7 @@ public class ModelBuilderPlugin extends BasePlugin implements ILombokPluginHook 
         // 增加静态builder方法实现和lombok一样
         Method builder = JavaElementGeneratorTools.generateMethod(
                 "builder",
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 builderType
         );
         commentGenerator.addGeneralMethodComment(builder, introspectedTable);
@@ -163,7 +163,7 @@ public class ModelBuilderPlugin extends BasePlugin implements ILombokPluginHook 
 
             Method method = JavaElementGeneratorTools.generateMethod(
                     field.getName(),
-                    JavaVisibility.PUBLIC,
+                    false, JavaVisibility.PUBLIC,
                     innerClass.getType(),
                     new Parameter(field.getType(), field.getName())
             );
@@ -183,7 +183,7 @@ public class ModelBuilderPlugin extends BasePlugin implements ILombokPluginHook 
 
         Method build = JavaElementGeneratorTools.generateMethod(
                 "build",
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 topLevelClass.getType()
         );
         build.addBodyLine("return this.obj;");

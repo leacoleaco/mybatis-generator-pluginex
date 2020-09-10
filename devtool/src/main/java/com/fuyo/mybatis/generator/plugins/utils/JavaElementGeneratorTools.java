@@ -69,15 +69,17 @@ public class JavaElementGeneratorTools {
     /**
      * 生成方法
      * @param methodName 方法名
+     * @param isAbstract
      * @param visibility 可见性
      * @param returnType 返回值类型
      * @param parameters 参数列表
      * @return
      */
-    public static Method generateMethod(String methodName, JavaVisibility visibility, FullyQualifiedJavaType returnType, Parameter... parameters) {
+    public static Method generateMethod(String methodName, boolean isAbstract, JavaVisibility visibility, FullyQualifiedJavaType returnType, Parameter... parameters) {
         Method method = new Method(methodName);
         method.setVisibility(visibility);
         method.setReturnType(returnType);
+        method.setAbstract(isAbstract);
         if (parameters != null) {
             for (Parameter parameter : parameters) {
                 method.addParameter(parameter);
@@ -110,7 +112,7 @@ public class JavaElementGeneratorTools {
     public static Method generateSetterMethod(Field field) {
         Method method = generateMethod(
                 "set" + com.fuyo.mybatis.generator.plugins.utils.FormatTools.upFirstChar(field.getName()),
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 null,
                 new Parameter(field.getType(), field.getName())
         );
@@ -125,7 +127,7 @@ public class JavaElementGeneratorTools {
     public static Method generateGetterMethod(Field field) {
         Method method = generateMethod(
                 "get" + FormatTools.upFirstChar(field.getName()),
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 field.getType()
         );
         return generateMethodBody(method, "return this." + field.getName() + ";");

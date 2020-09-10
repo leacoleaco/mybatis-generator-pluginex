@@ -128,7 +128,7 @@ public class LimitPlugin extends BasePlugin implements ISelectSelectivePluginHoo
         // 提供几个快捷方法
         Method setLimit = JavaElementGeneratorTools.generateMethod(
                 "limit",
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 topLevelClass.getType(),
                 new Parameter(integerWrapper, "rows")
         );
@@ -142,7 +142,7 @@ public class LimitPlugin extends BasePlugin implements ISelectSelectivePluginHoo
 
         Method setLimit2 = JavaElementGeneratorTools.generateMethod(
                 "limit",
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 topLevelClass.getType(),
                 new Parameter(integerWrapper, "offset"),
                 new Parameter(integerWrapper, "rows")
@@ -159,7 +159,7 @@ public class LimitPlugin extends BasePlugin implements ISelectSelectivePluginHoo
 
         Method setPage = JavaElementGeneratorTools.generateMethod(
                 "page",
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 topLevelClass.getType(),
                 new Parameter(integerWrapper, "page"),
                 new Parameter(integerWrapper, "pageSize")

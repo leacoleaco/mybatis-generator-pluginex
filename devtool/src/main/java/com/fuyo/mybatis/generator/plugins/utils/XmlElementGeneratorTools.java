@@ -22,16 +22,13 @@ import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.OutputUtilities;
 import org.mybatis.generator.api.dom.xml.Attribute;
-import org.mybatis.generator.api.dom.xml.Element;
 import org.mybatis.generator.api.dom.xml.TextElement;
+import org.mybatis.generator.api.dom.xml.VisitableElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
 import org.mybatis.generator.config.GeneratedKey;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
 
@@ -52,11 +49,11 @@ public class XmlElementGeneratorTools {
      * @param generatedKey       the generated key for the current table
      * @return the selectKey element
      */
-    public static Element getSelectKey(IntrospectedColumn introspectedColumn, GeneratedKey generatedKey) {
+    public static VisitableElement getSelectKey(IntrospectedColumn introspectedColumn, GeneratedKey generatedKey) {
         return getSelectKey(introspectedColumn, generatedKey, null);
     }
 
-    public static Element getSelectKey(IntrospectedColumn introspectedColumn, GeneratedKey generatedKey, String prefix) {
+    public static VisitableElement getSelectKey(IntrospectedColumn introspectedColumn, GeneratedKey generatedKey, String prefix) {
         String identityColumnType = introspectedColumn.getFullyQualifiedJavaType().getFullyQualifiedName();
 
         XmlElement answer = new XmlElement("selectKey");
@@ -69,19 +66,19 @@ public class XmlElementGeneratorTools {
         return answer;
     }
 
-    public static Element getBaseColumnListElement(IntrospectedTable introspectedTable) {
+    public static VisitableElement getBaseColumnListElement(IntrospectedTable introspectedTable) {
         XmlElement answer = new XmlElement("include");
         answer.addAttribute(new Attribute("refid", introspectedTable.getBaseColumnListId()));
         return answer;
     }
 
-    public static Element getBlobColumnListElement(IntrospectedTable introspectedTable) {
+    public static VisitableElement getBlobColumnListElement(IntrospectedTable introspectedTable) {
         XmlElement answer = new XmlElement("include");
         answer.addAttribute(new Attribute("refid", introspectedTable.getBlobColumnListId()));
         return answer;
     }
 
-    public static Element getExampleIncludeElement(IntrospectedTable introspectedTable) {
+    public static VisitableElement getExampleIncludeElement(IntrospectedTable introspectedTable) {
         XmlElement ifElement = new XmlElement("if");
         ifElement.addAttribute(new Attribute("test", "_parameter != null"));
 
@@ -92,7 +89,7 @@ public class XmlElementGeneratorTools {
         return ifElement;
     }
 
-    public static Element getUpdateByExampleIncludeElement(IntrospectedTable introspectedTable) {
+    public static VisitableElement getUpdateByExampleIncludeElement(IntrospectedTable introspectedTable) {
         XmlElement ifElement = new XmlElement("if");
         ifElement.addAttribute(new Attribute("test", "_parameter != null"));
 
@@ -121,14 +118,14 @@ public class XmlElementGeneratorTools {
     public static void useGeneratedKeys(XmlElement element, IntrospectedTable introspectedTable, String prefix) {
         GeneratedKey gk = introspectedTable.getGeneratedKey();
         if (gk != null) {
-            IntrospectedColumn introspectedColumn = IntrospectedTableTools.safeGetColumn(introspectedTable, gk.getColumn());
+            Optional<IntrospectedColumn> introspectedColumn = IntrospectedTableTools.safeGetColumn(introspectedTable, gk.getColumn());
             // if the column is null, then it's a configuration error. The
             // warning has already been reported
-            if (introspectedColumn != null) {
+            if (introspectedColumn.isPresent()) {
                 // 使用JDBC的getGenereatedKeys方法获取主键并赋值到keyProperty设置的领域模型属性中。所以只支持MYSQL和SQLServer
                 element.addAttribute(new Attribute("useGeneratedKeys", "true"));
-                element.addAttribute(new Attribute("keyProperty", (prefix == null ? "" : prefix) + introspectedColumn.getJavaProperty()));
-                element.addAttribute(new Attribute("keyColumn", introspectedColumn.getActualColumnName()));
+                element.addAttribute(new Attribute("keyProperty", (prefix == null ? "" : prefix) + introspectedColumn.get().getJavaProperty()));
+                element.addAttribute(new Attribute("keyColumn", introspectedColumn.get().getActualColumnName()));
             }
         }
     }
@@ -138,7 +135,7 @@ public class XmlElementGeneratorTools {
      * @param columns
      * @return
      */
-    public static List<Element> generateKeys(List<IntrospectedColumn> columns) {
+    public static List<VisitableElement> generateKeys(List<IntrospectedColumn> columns) {
         return generateKeys(columns, false);
     }
 
@@ -148,7 +145,7 @@ public class XmlElementGeneratorTools {
      * @param bracket
      * @return
      */
-    public static List<Element> generateKeys(List<IntrospectedColumn> columns, boolean bracket) {
+    public static List<VisitableElement> generateKeys(List<IntrospectedColumn> columns, boolean bracket) {
         return generateCommColumns(columns, null, bracket, 1);
     }
 
@@ -187,7 +184,7 @@ public class XmlElementGeneratorTools {
      * @param columns
      * @return
      */
-    public static List<Element> generateValues(List<IntrospectedColumn> columns) {
+    public static List<VisitableElement> generateValues(List<IntrospectedColumn> columns) {
         return generateValues(columns, null);
     }
 
@@ -197,7 +194,7 @@ public class XmlElementGeneratorTools {
      * @param prefix
      * @return
      */
-    public static List<Element> generateValues(List<IntrospectedColumn> columns, String prefix) {
+    public static List<VisitableElement> generateValues(List<IntrospectedColumn> columns, String prefix) {
         return generateValues(columns, prefix, true);
     }
 
@@ -208,7 +205,7 @@ public class XmlElementGeneratorTools {
      * @param bracket
      * @return
      */
-    public static List<Element> generateValues(List<IntrospectedColumn> columns, String prefix, boolean bracket) {
+    public static List<VisitableElement> generateValues(List<IntrospectedColumn> columns, String prefix, boolean bracket) {
         return generateCommColumns(columns, prefix, bracket, 2);
     }
 
@@ -247,7 +244,7 @@ public class XmlElementGeneratorTools {
      * @param columns
      * @return
      */
-    public static List<Element> generateSets(List<IntrospectedColumn> columns) {
+    public static List<VisitableElement> generateSets(List<IntrospectedColumn> columns) {
         return generateSets(columns, null);
     }
 
@@ -257,7 +254,7 @@ public class XmlElementGeneratorTools {
      * @param prefix
      * @return
      */
-    public static List<Element> generateSets(List<IntrospectedColumn> columns, String prefix) {
+    public static List<VisitableElement> generateSets(List<IntrospectedColumn> columns, String prefix) {
         return generateCommColumns(columns, prefix, false, 3);
     }
 
@@ -286,7 +283,7 @@ public class XmlElementGeneratorTools {
      * @param prefix
      * @return
      */
-    public static List<Element> generateUpsertKeys(List<IntrospectedColumn> columns, String prefix) {
+    public static List<VisitableElement> generateUpsertKeys(List<IntrospectedColumn> columns, String prefix) {
         return generateCommColumns(columns, prefix, true, 1, true);
     }
 
@@ -297,7 +294,7 @@ public class XmlElementGeneratorTools {
      * @param bracket
      * @return
      */
-    public static List<Element> generateUpsertValues(List<IntrospectedColumn> columns, String prefix, boolean bracket) {
+    public static List<VisitableElement> generateUpsertValues(List<IntrospectedColumn> columns, String prefix, boolean bracket) {
         return generateCommColumns(columns, prefix, bracket, 2, true);
     }
 
@@ -307,7 +304,7 @@ public class XmlElementGeneratorTools {
      * @param prefix
      * @return
      */
-    public static List<Element> generateUpsertSets(List<IntrospectedColumn> columns, String prefix) {
+    public static List<VisitableElement> generateUpsertSets(List<IntrospectedColumn> columns, String prefix) {
         return generateCommColumns(columns, prefix, false, 3, true);
     }
 
@@ -319,7 +316,7 @@ public class XmlElementGeneratorTools {
      * @param type    1:key,2:value,3:set
      * @return
      */
-    private static List<Element> generateCommColumns(List<IntrospectedColumn> columns, String prefix, boolean bracket, int type) {
+    private static List<VisitableElement> generateCommColumns(List<IntrospectedColumn> columns, String prefix, boolean bracket, int type) {
         return generateCommColumns(columns, prefix, bracket, type, false);
     }
 
@@ -332,8 +329,8 @@ public class XmlElementGeneratorTools {
      * @param upsert
      * @return
      */
-    private static List<Element> generateCommColumns(List<IntrospectedColumn> columns, String prefix, boolean bracket, int type, boolean upsert) {
-        List<Element> list = new ArrayList<>();
+    private static List<VisitableElement> generateCommColumns(List<IntrospectedColumn> columns, String prefix, boolean bracket, int type, boolean upsert) {
+        List<VisitableElement> list = new ArrayList<>();
 
         // 只有upsert插件才会传入 IdentityAndGeneratedAlwaysColumn
         if (upsert && hasIdentityAndGeneratedAlwaysColumns(columns)) {
@@ -359,7 +356,7 @@ public class XmlElementGeneratorTools {
 
                 switch (type) {
                     case 3:
-                        List<Element> incrementEles = com.fuyo.mybatis.generator.plugins.utils.PluginTools.getHook(IIncrementsPluginHook.class).incrementSetElementGenerated(introspectedColumn, prefix, false);
+                        List<VisitableElement> incrementEles = com.fuyo.mybatis.generator.plugins.utils.PluginTools.getHook(IIncrementsPluginHook.class).incrementSetElementGenerated(introspectedColumn, prefix, false);
                         XmlElement incrementEle = com.fuyo.mybatis.generator.plugins.utils.PluginTools.getHook(IIncrementPluginHook.class).generateIncrementSet(introspectedColumn, prefix, false);
 
                         if (incrementEle != null) {
@@ -486,10 +483,10 @@ public class XmlElementGeneratorTools {
     private static void generateSelectiveCommColumnTo(XmlElement element, IntrospectedColumn introspectedColumn, String prefix, int type) {
         switch (type) {
             case 3:
-                List<Element> incrementEles = PluginTools.getHook(IIncrementsPluginHook.class).incrementSetElementGenerated(introspectedColumn, prefix, true);
+                List<VisitableElement> incrementEles = PluginTools.getHook(IIncrementsPluginHook.class).incrementSetElementGenerated(introspectedColumn, prefix, true);
                 if (!incrementEles.isEmpty()) {
                     // 增量插件支持
-                    for (Element ele : incrementEles) {
+                    for (VisitableElement ele : incrementEles) {
                         element.addElement(ele);
                     }
                 } else {

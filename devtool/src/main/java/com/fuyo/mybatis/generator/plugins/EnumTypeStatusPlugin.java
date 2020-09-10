@@ -30,10 +30,7 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.internal.util.StringUtility;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -87,14 +84,14 @@ public class EnumTypeStatusPlugin extends BasePlugin implements ILogicalDeletePl
                 // 切分
                 String[] enumColumnsStrs = enumColumns.split(",");
                 for (String enumColumnsStr : enumColumnsStrs) {
-                    IntrospectedColumn column = IntrospectedTableTools.safeGetColumn(introspectedTable, enumColumnsStr);
-                    if (column != null) {
+                    Optional<IntrospectedColumn> column = IntrospectedTableTools.safeGetColumn(introspectedTable, enumColumnsStr);
+                    if (column.isPresent()) {
                         try {
-                            EnumInfo enumInfo = new EnumInfo(column);
+                            EnumInfo enumInfo = new EnumInfo(column.get());
                             // 解析注释
-                            enumInfo.parseRemarks(column.getRemarks());
+                            enumInfo.parseRemarks(column.get().getRemarks());
                             if (enumInfo.hasItems()) {
-                                this.enumColumns.put(column.getJavaProperty(), enumInfo);
+                                this.enumColumns.put(column.get().getJavaProperty(), enumInfo);
                             }
                         } catch (EnumInfo.CannotParseException e) {
                             warnings.add("插件" + EnumTypeStatusPlugin.class.getTypeName() + "没有找到column为" + enumColumnsStr.trim() + "对应格式的注释的字段！");

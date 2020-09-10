@@ -17,8 +17,8 @@
 package com.fuyo.mybatis.generator.plugins.utils;
 
 import org.mybatis.generator.api.dom.xml.Attribute;
-import org.mybatis.generator.api.dom.xml.Element;
 import org.mybatis.generator.api.dom.xml.TextElement;
+import org.mybatis.generator.api.dom.xml.VisitableElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 
 import java.util.ArrayList;
@@ -103,8 +103,8 @@ public class XmlElementTools {
      */
     public static List<XmlElement> findXmlElements(XmlElement xmlElement, String name) {
         List<XmlElement> list = new ArrayList<>();
-        List<Element> elements = xmlElement.getElements();
-        for (Element ele : elements) {
+        List<VisitableElement> elements = xmlElement.getElements();
+        for (VisitableElement ele : elements) {
             if (ele instanceof XmlElement) {
                 XmlElement xmlElement1 = (XmlElement) ele;
                 if (name.equalsIgnoreCase(xmlElement1.getName())) {
@@ -123,7 +123,7 @@ public class XmlElementTools {
      */
     public static List<TextElement> findAllTextElements(XmlElement xmlElement) {
         List<TextElement> textElements = new ArrayList<>();
-        for (Element element : xmlElement.getElements()) {
+        for (VisitableElement element : xmlElement.getElements()) {
             if (element instanceof XmlElement) {
                 textElements.addAll(findAllTextElements((XmlElement) element));
             } else if (element instanceof TextElement) {
@@ -144,7 +144,7 @@ public class XmlElementTools {
         for (Attribute attribute : element.getAttributes()) {
             destEle.addAttribute(XmlElementTools.clone(attribute));
         }
-        for (Element ele : element.getElements()) {
+        for (VisitableElement ele : element.getElements()) {
             if (ele instanceof XmlElement) {
                 destEle.addElement(XmlElementTools.clone((XmlElement) ele));
             } else if (ele instanceof TextElement) {
@@ -186,56 +186,56 @@ public class XmlElementTools {
         return res;
     }
 
-    public static XmlElement createElement(String name, Supplier<Element> child, Supplier<Element>... children) {
+    public static XmlElement createElement(String name, Supplier<VisitableElement> child, Supplier<VisitableElement>... children) {
         XmlElement element = createElement(name);
         element.addElement(child.get());
-        for (Supplier<Element> childn : children) {
+        for (Supplier<VisitableElement> childn : children) {
             element.addElement(childn.get());
         }
         return element;
     }
 
-    public static XmlElement createElement(String name, Attribute attribute1, Supplier<Element> child, Supplier<Element>... children) {
+    public static XmlElement createElement(String name, Attribute attribute1, Supplier<VisitableElement> child, Supplier<VisitableElement>... children) {
         XmlElement element = createElement(name, attribute1);
         element.addElement(child.get());
-        for (Supplier<Element> childn : children) {
+        for (Supplier<VisitableElement> childn : children) {
             element.addElement(childn.get());
         }
         return element;
     }
 
 
-    public static XmlElement createElement(String name, Attribute attribute1, Attribute attribute2, Supplier<Element> child, Supplier<Element>... children) {
+    public static XmlElement createElement(String name, Attribute attribute1, Attribute attribute2, Supplier<VisitableElement> child, Supplier<VisitableElement>... children) {
         XmlElement element = createElement(name, attribute1, attribute2);
         element.addElement(child.get());
-        for (Supplier<Element> childn : children) {
+        for (Supplier<VisitableElement> childn : children) {
             element.addElement(childn.get());
         }
         return element;
     }
 
-    public static XmlElement createElement(String name, Attribute attribute1, Attribute attribute2, Attribute attribute3, Supplier<Element> child, Supplier<Element>... children) {
+    public static XmlElement createElement(String name, Attribute attribute1, Attribute attribute2, Attribute attribute3, Supplier<VisitableElement> child, Supplier<VisitableElement>... children) {
         XmlElement element = createElement(name, attribute1, attribute2, attribute3);
         element.addElement(child.get());
-        for (Supplier<Element> childn : children) {
+        for (Supplier<VisitableElement> childn : children) {
             element.addElement(childn.get());
         }
         return element;
     }
 
-    public static XmlElement createElement(String name, Attribute attribute1, Attribute attribute2, Attribute attribute3, Attribute attribute4, Supplier<Element> child, Supplier<Element>... children) {
+    public static XmlElement createElement(String name, Attribute attribute1, Attribute attribute2, Attribute attribute3, Attribute attribute4, Supplier<VisitableElement> child, Supplier<VisitableElement>... children) {
         XmlElement element = createElement(name, attribute1, attribute2, attribute3, attribute4);
         element.addElement(child.get());
-        for (Supplier<Element> childn : children) {
+        for (Supplier<VisitableElement> childn : children) {
             element.addElement(childn.get());
         }
         return element;
     }
 
-    public static XmlElement createElement(String name, Attribute attribute1, Attribute attribute2, Attribute attribute3, Attribute attribute4, Attribute attribute5, Supplier<Element> child, Supplier<Element>... children) {
+    public static XmlElement createElement(String name, Attribute attribute1, Attribute attribute2, Attribute attribute3, Attribute attribute4, Attribute attribute5, Supplier<VisitableElement> child, Supplier<VisitableElement>... children) {
         XmlElement element = createElement(name, attribute1, attribute2, attribute3, attribute4, attribute5);
         element.addElement(child.get());
-        for (Supplier<Element> childn : children) {
+        for (Supplier<VisitableElement> childn : children) {
             element.addElement(childn.get());
         }
         return element;

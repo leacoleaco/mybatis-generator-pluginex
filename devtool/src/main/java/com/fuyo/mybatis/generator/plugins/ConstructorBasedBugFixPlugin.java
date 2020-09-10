@@ -55,10 +55,9 @@ public class ConstructorBasedBugFixPlugin extends BasePlugin {
                 String[] strs = version.split("\\.");
                 if (strs.length == 3 && strs[0].equals("1") && strs[1].equals("3") && Integer.parseInt(strs[2]) < 6){
                     // 添加没有BLOBs的构造方法
-                    Method method = new Method();
+                    Method method = new Method(topLevelClass.getType().getShortName());
                     method.setVisibility(JavaVisibility.PUBLIC);
                     method.setConstructor(true);
-                    method.setName(topLevelClass.getType().getShortName());
                     commentGenerator.addGeneralMethodComment(method, introspectedTable);
 
                     // 使用没有blobs的字段

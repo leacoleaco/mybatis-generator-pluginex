@@ -37,6 +37,7 @@ import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
  * ---------------------------------------------------------------------------
  * 逻辑删除插件
  * ---------------------------------------------------------------------------
+ *
  * @author: hewei
  * @time:2017/1/13 14:08
  * ---------------------------------------------------------------------------
@@ -112,6 +113,7 @@ public class LogicalDeletePlugin extends BasePlugin {
     /**
      * 初始化阶段
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param introspectedTable
      * @return
      */
@@ -127,7 +129,8 @@ public class LogicalDeletePlugin extends BasePlugin {
         if (introspectedTable.getTableConfigurationProperty(PRO_LOGICAL_DELETE_COLUMN) != null) {
             logicalDeleteColumn = introspectedTable.getTableConfigurationProperty(PRO_LOGICAL_DELETE_COLUMN);
         }
-        this.logicalDeleteColumn = IntrospectedTableTools.safeGetColumn(introspectedTable, logicalDeleteColumn);
+        this.logicalDeleteColumn =
+                IntrospectedTableTools.safeGetColumn(introspectedTable, logicalDeleteColumn).orElse(null);
         // 判断如果表单独配置了逻辑删除列，但是却没有找到对应列进行提示
         if (introspectedTable.getTableConfigurationProperty(PRO_LOGICAL_DELETE_COLUMN) != null && this.logicalDeleteColumn == null) {
             warnings.add("itfsw(逻辑删除插件):" + introspectedTable.getFullyQualifiedTable() + "没有找到您配置的逻辑删除列(" + introspectedTable.getTableConfigurationProperty(PRO_LOGICAL_DELETE_COLUMN) + ")！");
@@ -231,18 +234,18 @@ public class LogicalDeletePlugin extends BasePlugin {
     /**
      * Java Client Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param interfaze
-     * @param topLevelClass
      * @param introspectedTable
      * @return
      */
     @Override
-    public boolean clientGenerated(Interface interfaze, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+    public boolean clientGenerated(Interface interfaze, IntrospectedTable introspectedTable) {
         if (this.logicalDeleteColumn != null) {
             // 1. 逻辑删除ByExample
             Method mLogicalDeleteByExample = JavaElementGeneratorTools.generateMethod(
                     METHOD_LOGICAL_DELETE_BY_EXAMPLE,
-                    JavaVisibility.DEFAULT,
+                    true, JavaVisibility.DEFAULT,
                     FullyQualifiedJavaType.getIntInstance(),
                     new Parameter(new FullyQualifiedJavaType(introspectedTable.getExampleType()), "example", "@Param(\"example\")")
             );
@@ -260,7 +263,7 @@ public class LogicalDeletePlugin extends BasePlugin {
                 // 2.1. 逻辑删除ByExample
                 Method mLogicalDeleteByPrimaryKey = JavaElementGeneratorTools.generateMethod(
                         METHOD_LOGICAL_DELETE_BY_PRIMARY_KEY,
-                        JavaVisibility.DEFAULT,
+                        true, JavaVisibility.DEFAULT,
                         FullyQualifiedJavaType.getIntInstance()
                 );
                 commentGenerator.addGeneralMethodComment(mLogicalDeleteByPrimaryKey, introspectedTable);
@@ -268,7 +271,7 @@ public class LogicalDeletePlugin extends BasePlugin {
                 // 2.2 增强selectByPrimaryKey
                 Method mSelectByPrimaryKey = JavaElementGeneratorTools.generateMethod(
                         METHOD_SELECT_BY_PRIMARY_KEY_WITH_LOGICAL_DELETE,
-                        JavaVisibility.DEFAULT,
+                        true, JavaVisibility.DEFAULT,
                         introspectedTable.getRules().calculateAllFieldsClass()
                 );
 
@@ -337,6 +340,7 @@ public class LogicalDeletePlugin extends BasePlugin {
     /**
      * SQL Map Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param document
      * @param introspectedTable
      * @return
@@ -466,6 +470,7 @@ public class LogicalDeletePlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param field
      * @param topLevelClass
      * @param introspectedColumn
@@ -485,7 +490,7 @@ public class LogicalDeletePlugin extends BasePlugin {
                 // 2. andLogicalDeleted 方法
                 Method mAndLogicalDeleted = JavaElementGeneratorTools.generateMethod(
                         METHOD_LOGICAL_DELETED,
-                        JavaVisibility.PUBLIC,
+                        false, JavaVisibility.PUBLIC,
                         null,
                         new Parameter(FullyQualifiedJavaType.getBooleanPrimitiveInstance(), "deleted")
                 );
@@ -522,6 +527,7 @@ public class LogicalDeletePlugin extends BasePlugin {
     /**
      * ModelExample Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -580,6 +586,7 @@ public class LogicalDeletePlugin extends BasePlugin {
 
     /**
      * 获取逻辑删除枚举
+     *
      * @param delete
      * @return
      */
@@ -594,6 +601,7 @@ public class LogicalDeletePlugin extends BasePlugin {
 
     /**
      * 获取逻辑删除列所在model(modelExampleClassGenerated执行顺序在前面！！！！！和官网上不一样，没办法只有自己去找）
+     *
      * @return
      */
     private FullyQualifiedJavaType getColumnInModelType() {

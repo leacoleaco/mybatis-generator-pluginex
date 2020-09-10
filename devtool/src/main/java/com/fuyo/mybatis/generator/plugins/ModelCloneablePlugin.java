@@ -80,7 +80,7 @@ public class ModelCloneablePlugin extends BasePlugin {
         // clone
         Method cloneMethod = JavaElementGeneratorTools.generateMethod(
                 "clone",
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 topLevelClass.getType()
         );
         commentGenerator.addGeneralMethodComment(cloneMethod, introspectedTable);

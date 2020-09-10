@@ -20,7 +20,6 @@ import com.fuyo.mybatis.generator.plugins.utils.BasePlugin;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Interface;
-import org.mybatis.generator.api.dom.java.TopLevelClass;
 import org.mybatis.generator.internal.util.StringUtility;
 
 import java.util.*;
@@ -80,7 +79,7 @@ public class MapperAnnotationPlugin extends BasePlugin {
      * @return
      */
     @Override
-    public boolean clientGenerated(Interface interfaze, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+    public boolean clientGenerated(Interface interfaze, IntrospectedTable introspectedTable) {
         for (String annotation : this.annotations) {
             if (annotation.equals("@Mapper")) {
                 if (introspectedTable.getTargetRuntime() == IntrospectedTable.TargetRuntime.MYBATIS3) {

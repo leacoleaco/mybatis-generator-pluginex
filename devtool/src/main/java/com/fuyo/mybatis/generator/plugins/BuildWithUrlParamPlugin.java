@@ -39,7 +39,7 @@ public class BuildWithUrlParamPlugin extends BasePlugin {
     private Method generateBuildMethod(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         Method method = JavaElementGeneratorTools.generateMethod(
                 "build",
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 FullyQualifiedJavaType.getCriteriaInstance()
         );
         commentGenerator.addGeneralMethodComment(method, introspectedTable);
@@ -52,7 +52,7 @@ public class BuildWithUrlParamPlugin extends BasePlugin {
     private Method generateBuildWithUrlMethod(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         Method method = JavaElementGeneratorTools.generateMethod(
                 "buildWithUrlParam",
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 FullyQualifiedJavaType.getCriteriaInstance(),
                 new Parameter(new FullyQualifiedJavaType("java.util.Map<String,Object>"),
                         "params")
@@ -67,7 +67,7 @@ public class BuildWithUrlParamPlugin extends BasePlugin {
     private Method generateBuildByUrlParamsMethod(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         Method method = JavaElementGeneratorTools.generateMethod(
                 "buildByUrlParams",
-                JavaVisibility.PUBLIC,
+                false, JavaVisibility.PUBLIC,
                 FullyQualifiedJavaType.getCriteriaInstance(),
                 new Parameter(new FullyQualifiedJavaType("java.util.Map<String, Object>"), "params")
         );
@@ -134,7 +134,7 @@ public class BuildWithUrlParamPlugin extends BasePlugin {
     private Method generateBuildWhereExpression(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         Method method = JavaElementGeneratorTools.generateMethod(
                 "buildWhereExpression",
-                JavaVisibility.PRIVATE,
+                false, JavaVisibility.PRIVATE,
                 null,
                 new Parameter(FullyQualifiedJavaType.getCriteriaInstance(), "urlCriteria"),
                 new Parameter(new FullyQualifiedJavaType("java.lang.String"), "expression"),
@@ -148,7 +148,9 @@ public class BuildWithUrlParamPlugin extends BasePlugin {
                         "\n" +
                         "        String compPrefix = expression.substring(2, 4);\n" +
                         "        String propName = SQLFilter.escape(expression.substring(5));\n" +
-                        "        String columnName = parse(propName);\n" +
+                        "        String columnName = " +
+//                        introspectedTable..getAliasedFullyQualifiedTableNameAtRuntime()
+                        "parse(propName);\n" +
                         "        if(columnName == null){\n" +
                         "            throw new java.lang.IllegalArgumentException(\"\\\"\" + propName + \"\\\" not exist\");\n" +
                         "        }\n" +
@@ -224,7 +226,7 @@ public class BuildWithUrlParamPlugin extends BasePlugin {
     private Method generateBuildOrderExpressionMethod(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         Method method = JavaElementGeneratorTools.generateMethod(
                 "buildOrderExpression",
-                JavaVisibility.PRIVATE,
+                false, JavaVisibility.PRIVATE,
                 null,
                 new Parameter(new FullyQualifiedJavaType("java.util.List<java.lang.String>"), "orderMaps")
         );
@@ -263,7 +265,7 @@ public class BuildWithUrlParamPlugin extends BasePlugin {
     private Method generateParseMethod(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         Method method = JavaElementGeneratorTools.generateMethod(
                 "parse",
-                JavaVisibility.PRIVATE,
+                false, JavaVisibility.PRIVATE,
                 new FullyQualifiedJavaType("java.lang.String"),
                 new Parameter(new FullyQualifiedJavaType("java.lang.String"), "column")
         );
@@ -313,7 +315,7 @@ public class BuildWithUrlParamPlugin extends BasePlugin {
         //增加 sqlInject 方法
         Method sqlInjectMethod = JavaElementGeneratorTools.generateMethod(
                 "sqlInject",
-                JavaVisibility.PROTECTED,
+                false, JavaVisibility.PROTECTED,
                 new FullyQualifiedJavaType("java.lang.String"),
                 new Parameter(new FullyQualifiedJavaType("java.lang.String"), "str")
         );
@@ -349,7 +351,7 @@ public class BuildWithUrlParamPlugin extends BasePlugin {
         //增加 isBlank 判断方法
         Method isBlankMethod = JavaElementGeneratorTools.generateMethod(
                 "isBlank",
-                JavaVisibility.PRIVATE,
+                false, JavaVisibility.PRIVATE,
                 new FullyQualifiedJavaType("boolean"),
                 new Parameter(new FullyQualifiedJavaType("java.lang.String"), "str")
         );
@@ -373,7 +375,7 @@ public class BuildWithUrlParamPlugin extends BasePlugin {
         //增加转义字符输出方法
         Method escapeMethod = JavaElementGeneratorTools.generateMethod(
                 "escape",
-                JavaVisibility.PRIVATE,
+                false, JavaVisibility.PRIVATE,
                 new FullyQualifiedJavaType("java.lang.String"),
                 new Parameter(new FullyQualifiedJavaType("java.lang.String"), "str")
         );
@@ -400,7 +402,7 @@ public class BuildWithUrlParamPlugin extends BasePlugin {
     private Method generatesafeParseMethod(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         Method method = JavaElementGeneratorTools.generateMethod(
                 "safeParse",
-                JavaVisibility.PRIVATE,
+                false, JavaVisibility.PRIVATE,
                 new FullyQualifiedJavaType("int"),
                 new Parameter(new FullyQualifiedJavaType("java.lang.Object"), "obj"),
                 new Parameter(new FullyQualifiedJavaType("int"), "defaultInt")

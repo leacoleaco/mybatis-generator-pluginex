@@ -24,8 +24,9 @@ import org.mybatis.generator.api.dom.java.TypeParameter;
 
 /**
  * ---------------------------------------------------------------------------
- *
+ * <p>
  * ---------------------------------------------------------------------------
+ *
  * @author: hewei
  * @time:2018/5/7 18:14
  * ---------------------------------------------------------------------------
@@ -33,6 +34,7 @@ import org.mybatis.generator.api.dom.java.TypeParameter;
 public class JavaElementTools {
     /**
      * clone
+     *
      * @param method
      * @return
      */
@@ -42,7 +44,8 @@ public class JavaElementTools {
         for (String javaDocLine : method.getJavaDocLines()) {
             dest.addJavaDocLine(javaDocLine);
         }
-        dest.setReturnType(method.getReturnType());
+        method.getReturnType().ifPresent(dest::setReturnType);
+
         for (Parameter parameter : method.getParameters()) {
             dest.addParameter(JavaElementTools.clone(parameter));
         }
@@ -60,11 +63,13 @@ public class JavaElementTools {
         dest.setFinal(method.isFinal());
         dest.setStatic(method.isStatic());
         dest.setVisibility(method.getVisibility());
+        dest.setAbstract(method.isAbstract());
         return dest;
     }
 
     /**
      * clone
+     *
      * @param parameter
      * @return
      */

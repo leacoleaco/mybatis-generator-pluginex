@@ -17,13 +17,12 @@
 package com.fuyo.mybatis.generator.plugins.utils.hook;
 
 import com.fuyo.mybatis.generator.plugins.utils.BasePlugin;
-import com.fuyo.mybatis.generator.plugins.utils.BeanUtils;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.Plugin;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.api.dom.xml.Document;
-import org.mybatis.generator.api.dom.xml.Element;
+import org.mybatis.generator.api.dom.xml.VisitableElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.config.Context;
 import org.slf4j.Logger;
@@ -90,7 +89,10 @@ public class HookAggregator implements IUpsertPluginHook,
         List list = new ArrayList();
         // 反射获取插件列表，不能用单例去弄，不然因为类释放的问题而导致测试用例出问题
         try {
-            List<Plugin> plugins = (List<Plugin>) BeanUtils.getProperty(this.context.getPlugins(), "plugins");
+//            List<Plugin> plugins = (List<Plugin>) BeanUtils.getProperty(this.context.getPlugins(), "plugins");
+            java.lang.reflect.Field field = this.context.getPlugins().getClass().getSuperclass().getDeclaredField("plugins");
+            field.setAccessible(true);
+            List<Plugin> plugins = (List<Plugin>) field.get(this.context.getPlugins());
             for (Plugin plugin : plugins) {
                 if (clazz.isInstance(plugin)) {
                     list.add(plugin);
@@ -105,7 +107,7 @@ public class HookAggregator implements IUpsertPluginHook,
     // ============================================= IIncrementsPluginHook ==============================================
 
     @Override
-    public List<Element> incrementSetElementGenerated(IntrospectedColumn introspectedColumn, String prefix, boolean hasComma) {
+    public List<VisitableElement> incrementSetElementGenerated(IntrospectedColumn introspectedColumn, String prefix, boolean hasComma) {
         if (this.getPlugins(IIncrementsPluginHook.class).isEmpty()) {
             return new ArrayList<>();
         } else {

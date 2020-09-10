@@ -21,8 +21,8 @@ import org.mybatis.generator.api.CommentGenerator;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.api.dom.xml.Attribute;
-import org.mybatis.generator.api.dom.xml.Element;
 import org.mybatis.generator.api.dom.xml.TextElement;
+import org.mybatis.generator.api.dom.xml.VisitableElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 
 import java.util.Iterator;
@@ -57,9 +57,9 @@ public class FormatTools {
         // import
         Set<FullyQualifiedJavaType> importTypes = new TreeSet<>();
         // 返回
-        if (method.getReturnType() != null) {
-            importTypes.add(method.getReturnType());
-            importTypes.addAll(method.getReturnType().getTypeArguments());
+        if (method.getReturnType().isPresent()) {
+            importTypes.add(method.getReturnType().get());
+            importTypes.addAll(method.getReturnType().get().getTypeArguments());
         }
         // 参数 比较特殊的是ModelColumn生成的Column
         for (Parameter parameter : method.getParameters()) {
@@ -109,7 +109,7 @@ public class FormatTools {
         // sql 元素都放在sql后面
         if (element.getName().equals("sql")) {
             int index = 0;
-            for (Element ele : rootElement.getElements()) {
+            for (VisitableElement ele : rootElement.getElements()) {
                 if (ele instanceof XmlElement && ((XmlElement) ele).getName().equals("sql")) {
                     index++;
                 }
@@ -122,10 +122,10 @@ public class FormatTools {
             if (id == null) {
                 rootElement.addElement(element);
             } else {
-                List<Element> elements = rootElement.getElements();
+                List<VisitableElement> elements = rootElement.getElements();
                 int index = -1;
                 for (int i = 0; i < elements.size(); i++) {
-                    Element ele = elements.get(i);
+                    VisitableElement ele = elements.get(i);
                     if (ele instanceof XmlElement) {
                         String eleId = getIdFromElement((XmlElement) ele);
                         if (eleId != null) {
@@ -211,10 +211,10 @@ public class FormatTools {
      * @param element
      */
     public static void replaceComment(CommentGenerator commentGenerator, XmlElement element) {
-        Iterator<Element> elementIterator = element.getElements().iterator();
+        Iterator<VisitableElement> elementIterator = element.getElements().iterator();
         boolean flag = false;
         while (elementIterator.hasNext()) {
-            Element ele = elementIterator.next();
+            VisitableElement ele = elementIterator.next();
             if (ele instanceof TextElement && ((TextElement) ele).getContent().matches(".*<!--.*")) {
                 flag = true;
             }
