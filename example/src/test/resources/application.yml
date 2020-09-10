@@ -1,0 +1,36 @@
+spring:
+  profiles:
+    active: db
+  messages:
+    encoding: UTF-8
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://192.168.0.12:3306/fuyoo?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&verifyServerCertificate=false&useSSL=false
+#    username: leaco
+#    password: asdfghjkl
+    url: jdbc:mysql://101.200.157.145:33333/fuyoo-remote?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&verifyServerCertificate=false&useSSL=false
+    username: leaco
+    password: asdfghjkl1234567890
+
+logging:
+  level:
+    root: warn
+    com:
+      fuyo:
+        cloud:
+          db: debug
+
+
+pagehelper:
+  helperDialect:  mysql
+  reasonable: true
+  supportMethodsArguments:  true
+  params: count=countSql
+
+server:
+  port: 8083
+  servlet:
+    context-path: /
+
+swagger:
+  production: false
