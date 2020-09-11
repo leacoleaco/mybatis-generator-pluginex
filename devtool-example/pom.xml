@@ -8,9 +8,12 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.5.RELEASE</version>
+        <version>2.3.0.RELEASE</version>
         <relativePath/>
     </parent>
+
+    <properties>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -32,8 +35,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jooq</artifactId>
         </dependency>
 
         <dependency>
@@ -103,23 +106,32 @@
             <plugin>
                 <groupId>org.jooq</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>
-                <!--                <version>${jooq.version}</version>-->
+                <version>${jooq.version}</version>
                 <configuration>
                     <jdbc>
                         <driver>com.mysql.cj.jdbc.Driver</driver>
-                        <url>jdbc:mysql://127.0.0.1:3306/test?serverTimezone=Asia/Shanghai</url>
-                        <user>root</user>
-                        <password>root</password>
+                        <url>jdbc:mysql://192.168.0.12:3306/test?serverTimezone=Asia/Shanghai</url>
+                        <user>leaco</user>
+                        <password>asdfghjkl</password>
+                        <!--                        <url>jdbc:mysql://127.0.0.1:3306/test?serverTimezone=Asia/Shanghai</url>-->
+                        <!--                        <user>root</user>-->
+                        <!--                        <password>root</password>-->
                     </jdbc>
                     <generator>
+                        <generate>
+                            <pojos>true</pojos>
+                            <interfaces>true</interfaces>
+                            <daos>true</daos>
+                            <springAnnotations>true</springAnnotations>
+                        </generate>
                         <database>
                             <!--                            <includes>s1-.*</includes>-->
                             <!--                            <inputSchema>learn-jooq</inputSchema>-->
-                            <includes>test</includes>
+                            <includes>t_.*</includes>
                         </database>
                         <target>
                             <packageName>com.fuyo.cloud.db.biz.test.jooq</packageName>
-                            <directory>/src/main/java</directory>
+                            <directory>${basedir}/src/main/java</directory>
                         </target>
                     </generator>
                 </configuration>
