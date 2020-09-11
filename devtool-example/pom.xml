@@ -32,6 +32,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>1.2.13</version>
@@ -94,7 +99,31 @@
                     </dependency>
                 </dependencies>
             </plugin>
-
+            <!-- jooq 代码生成器插件 -->
+            <plugin>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>
+                <!--                <version>${jooq.version}</version>-->
+                <configuration>
+                    <jdbc>
+                        <driver>com.mysql.cj.jdbc.Driver</driver>
+                        <url>jdbc:mysql://127.0.0.1:3306/test?serverTimezone=Asia/Shanghai</url>
+                        <user>root</user>
+                        <password>root</password>
+                    </jdbc>
+                    <generator>
+                        <database>
+                            <!--                            <includes>s1-.*</includes>-->
+                            <!--                            <inputSchema>learn-jooq</inputSchema>-->
+                            <includes>test</includes>
+                        </database>
+                        <target>
+                            <packageName>com.fuyo.cloud.db.biz.test.jooq</packageName>
+                            <directory>/src/main/java</directory>
+                        </target>
+                    </generator>
+                </configuration>
+            </plugin>
         </plugins>
 
     </build>
