@@ -47,6 +47,7 @@ import static org.mybatis.generator.internal.util.StringUtility.isTrue;
  * ---------------------------------------------------------------------------
  * 模板注释生成工具
  * ---------------------------------------------------------------------------
+ *
  * @author: hewei
  * @time:2017/6/8 13:21
  * ---------------------------------------------------------------------------
@@ -62,8 +63,9 @@ public class TemplateCommentGenerator implements CommentGenerator {
 
     /**
      * 构造函数
+     *
      * @param context
-     * @param templatePath  模板路径
+     * @param templatePath 模板路径
      */
     public TemplateCommentGenerator(Context context, String templatePath) {
         try {
@@ -101,6 +103,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
 
     /**
      * 获取评论
+     *
      * @param map  模板参数
      * @param node 节点ID
      * @return
@@ -129,6 +132,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
 
     /**
      * 添加评论
+     *
      * @param javaElement
      * @param map
      * @param node
@@ -153,6 +157,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
 
     /**
      * 添加评论
+     *
      * @param compilationUnit
      * @param map
      * @param node
@@ -177,6 +182,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
 
     /**
      * 添加评论
+     *
      * @param xmlElement
      * @param map
      * @param node
@@ -202,8 +208,9 @@ public class TemplateCommentGenerator implements CommentGenerator {
     /**
      * Adds properties for this instance from any properties configured in the
      * CommentGenerator configuration.
-     *
+     * <p>
      * This method will be called before any of the other methods.
+     *
      * @param properties All properties from the configuration
      */
     @Override
@@ -222,6 +229,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
      *
      * <b>Important:</b> This method should add a the nonstandard JavaDoc tag "@mbg.generated" to the comment. Without
      * this tag, the Eclipse based Java merge feature will fail.
+     *
      * @param field              the field
      * @param introspectedTable  the introspected table
      * @param introspectedColumn the introspected column
@@ -240,6 +248,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
 
     /**
      * Adds the field comment.
+     *
      * @param field             the field
      * @param introspectedTable the introspected table
      */
@@ -259,10 +268,11 @@ public class TemplateCommentGenerator implements CommentGenerator {
      * be notified not to delete the entire class in case any manual
      * changes have been made.  So this method will always use the
      * "do not delete" annotation.
-     *
+     * <p>
      * Because of difficulties with the Java file merger, the default implementation
      * of this method should NOT add comments.  Comments should only be added if
      * specifically requested by the user (for example, by enabling table remark comments).
+     *
      * @param topLevelClass     the top level class
      * @param introspectedTable the introspected table
      */
@@ -279,34 +289,24 @@ public class TemplateCommentGenerator implements CommentGenerator {
 
     /**
      * Adds the inner class comment.
+     *
      * @param innerClass        the inner class
      * @param introspectedTable the introspected table
      */
     @Override
     public void addClassComment(InnerClass innerClass, IntrospectedTable introspectedTable) {
-        if (innerClass instanceof InnerInterfaceWrapperToInnerClass) {
-            InnerInterface innerInterface = ((InnerInterfaceWrapperToInnerClass) innerClass).getInnerInterface();
+        Map<String, Object> map = new HashMap<>();
+        map.put("mgb", MergeConstants.NEW_ELEMENT_TAG);
+        map.put("innerClass", innerClass);
+        map.put("introspectedTable", introspectedTable);
 
-            Map<String, Object> map = new HashMap<>();
-            map.put("mgb", MergeConstants.NEW_ELEMENT_TAG);
-            map.put("innerInterface", innerInterface);
-            map.put("introspectedTable", introspectedTable);
-
-            // 添加评论
-            addJavaElementComment(innerInterface, map, EnumNode.ADD_INTERFACE_COMMENT);
-        } else {
-            Map<String, Object> map = new HashMap<>();
-            map.put("mgb", MergeConstants.NEW_ELEMENT_TAG);
-            map.put("innerClass", innerClass);
-            map.put("introspectedTable", introspectedTable);
-
-            // 添加评论
-            addJavaElementComment(innerClass, map, EnumNode.ADD_CLASS_COMMENT);
-        }
+        // 添加评论
+        addJavaElementComment(innerClass, map, EnumNode.ADD_CLASS_COMMENT);
     }
 
     /**
      * Adds the inner class comment.
+     *
      * @param innerClass        the inner class
      * @param introspectedTable the introspected table
      * @param markAsDoNotDelete the mark as do not delete
@@ -325,6 +325,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
 
     /**
      * Adds the enum comment.
+     *
      * @param innerEnum         the inner enum
      * @param introspectedTable the introspected table
      */
@@ -341,6 +342,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
 
     /**
      * Adds the getter comment.
+     *
      * @param method             the method
      * @param introspectedTable  the introspected table
      * @param introspectedColumn the introspected column
@@ -359,6 +361,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
 
     /**
      * Adds the setter comment.
+     *
      * @param method             the method
      * @param introspectedTable  the introspected table
      * @param introspectedColumn the introspected column
@@ -377,6 +380,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
 
     /**
      * Adds the general method comment.
+     *
      * @param method            the method
      * @param introspectedTable the introspected table
      */
@@ -397,8 +401,9 @@ public class TemplateCommentGenerator implements CommentGenerator {
      * does not deal with this comment. If you run the generator repeatedly, you will only retain the comment from the
      * initial run.
      * <p>
-     *
+     * <p>
      * The default implementation does nothing.
+     *
      * @param compilationUnit the compilation unit
      */
     @Override
@@ -414,6 +419,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
     /**
      * This method should add a suitable comment as a child element of the specified xmlElement to warn users that the
      * element was generated and is subject to regeneration.
+     *
      * @param xmlElement the xml element
      */
     @Override
@@ -431,8 +437,9 @@ public class TemplateCommentGenerator implements CommentGenerator {
      * general file comment (such as a copyright notice). However, note that the XML file merge function does not deal
      * with this comment. If you run the generator repeatedly, you will only retain the comment from the initial run.
      * <p>
-     *
+     * <p>
      * The default implementation does nothing.
+     *
      * @param rootElement the root element
      */
     @Override
@@ -540,6 +547,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
 
         /**
          * 构造方法
+         *
          * @param value
          */
         EnumNode(String value) {
@@ -548,6 +556,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
 
         /**
          * 值
+         *
          * @return
          */
         public String value() {

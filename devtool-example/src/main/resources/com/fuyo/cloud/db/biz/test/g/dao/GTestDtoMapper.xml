@@ -108,7 +108,7 @@
           </trim>
         </if>
       </foreach>
-      <if test="example.joinCriteria!=null and example.joinCriteria.size()>0">
+      <if test="example.joinCriteria!=null and example.joinCriteria.size()&gt;0">
         <foreach collection="example.joinCriteria" item="criteria">
           <if test="criteria.valid">
             <trim prefix="and (" prefixOverrides="and" suffix=")">
@@ -180,7 +180,7 @@
       distinct
     </if>
     <choose>
-      <when test="selective != null and selective.length > 0">
+      <when test="selective != null and selective.length &gt; 0">
         <foreach collection="selective" item="column" separator=",">
           ${column.aliasedEscapedColumnName}
         </foreach>
@@ -222,7 +222,7 @@
     -->
     select
     <choose>
-      <when test="selective != null and selective.length > 0">
+      <when test="selective != null and selective.length &gt; 0">
         <foreach collection="selective" item="column" separator=",">
           ${column.aliasedEscapedColumnName}
         </foreach>
@@ -398,7 +398,7 @@
     -->
     select
     <choose>
-      <when test="selective != null and selective.length > 0">
+      <when test="selective != null and selective.length &gt; 0">
         <foreach collection="selective" item="column" separator=",">
           ${column.aliasedEscapedColumnName}
         </foreach>
@@ -423,7 +423,7 @@
     -->
     select
     <choose>
-      <when test="expressions != null and expressions.length > 0">
+      <when test="expressions != null and expressions.length &gt; 0">
         <foreach collection="expressions" item="expression" separator=",">
           ${expression}
         </foreach>
@@ -454,7 +454,7 @@
       distinct
     </if>
     <choose>
-      <when test="expressions != null and expressions.length > 0">
+      <when test="expressions != null and expressions.length &gt; 0">
         <foreach collection="expressions" item="expression" separator=",">
           ${expression}
         </foreach>
