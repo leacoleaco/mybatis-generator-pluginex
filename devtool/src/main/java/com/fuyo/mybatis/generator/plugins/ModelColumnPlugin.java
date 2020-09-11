@@ -244,13 +244,13 @@ public class ModelColumnPlugin extends BasePlugin {
         logger.debug("itfsw(数据Model属性对应Column获取插件):" + topLevelClass.getType().getShortName() + ".Column增加asc()和desc()方法。");
 
         // as
-        Method mAs = new Method("as");
+        Method mAs = new Method(METHOD_AS);
         mAs.setVisibility(JavaVisibility.PUBLIC);
         mAs.setReturnType(FullyQualifiedJavaType.getStringInstance());
-        mAs.addBodyLine("return this." + METHOD_GET_ESCAPED_COLUMN_NAME + "();");
+        mAs.addBodyLine("return this." + METHOD_GET_ESCAPED_COLUMN_NAME + "() + \" AS \" + this.javaProperty;");
         commentGenerator.addGeneralMethodComment(mAs, introspectedTable);
         FormatTools.addMethodWithBestPosition(innerEnum, mAs);
-        Method mAs1 = new Method("as");
+        Method mAs1 = new Method(METHOD_AS);
         mAs1.setVisibility(JavaVisibility.PUBLIC);
         mAs1.addParameter(new Parameter(FullyQualifiedJavaType.getStringInstance(), "alias"));
         mAs1.setReturnType(FullyQualifiedJavaType.getStringInstance());

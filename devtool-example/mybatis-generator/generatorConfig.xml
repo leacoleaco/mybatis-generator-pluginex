@@ -74,7 +74,13 @@
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.fuyo.cloud.db.biz.test.g.dao"
                              targetProject="src/main/java"/>
         <!--表名-->
-        <table tableName="test" domainObjectName="GTestDto">
+        <table tableName="test" alias="test" domainObjectName="GTestDto">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <columnOverride column="pictures" javaType="java.lang.String[]"
+                            typeHandler="com.fuyo.cloud.db.mybatis.JsonStringArrayTypeHandler"/>
+        </table>
+
+        <table tableName="test_part" alias="test_part" domainObjectName="GTestPartDto">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
             <columnOverride column="pictures" javaType="java.lang.String[]"
                             typeHandler="com.fuyo.cloud.db.mybatis.JsonStringArrayTypeHandler"/>
