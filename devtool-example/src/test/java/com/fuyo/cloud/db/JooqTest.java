@@ -3,10 +3,7 @@ package com.fuyo.cloud.db;
 import com.fuyo.cloud.db.biz.test.jooq.test.tables.TTest1;
 import com.fuyo.cloud.db.biz.test.jooq.test.tables.daos.TTest1Dao;
 import com.fuyo.cloud.db.biz.test.jooq.test.tables.records.TTest1Record;
-import org.jooq.DSLContext;
-import org.jooq.Record2;
-import org.jooq.Record3;
-import org.jooq.Result;
+import org.jooq.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,7 +28,7 @@ public class JooqTest {
     TTest1Dao tTest1Dao;
 
     @Test
-    public void  test2(){
+    public void test2() {
         com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1 tTest1 = tTest1Dao.fetchOneById(1);
         System.out.println(tTest1);
     }
@@ -51,4 +48,14 @@ public class JooqTest {
 
         System.out.println(s);
     }
+
+    @Test
+    public void testRecord() {
+        SelectQuery<Record> query = dslContext.selectQuery();
+//        query.addConditions(Operator.AND,T_TEST1.eq());
+
+    }
+
 }
+
+

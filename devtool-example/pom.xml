@@ -22,6 +22,17 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.11</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.9</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
@@ -118,6 +129,7 @@
                         <!--                        <password>root</password>-->
                     </jdbc>
                     <generator>
+                        <name>com.fuyo.jooq.generator.EnumGenerator</name>
                         <generate>
                             <pojos>true</pojos>
                             <interfaces>true</interfaces>
@@ -135,6 +147,13 @@
                         </target>
                     </generator>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.fuyo</groupId>
+                        <artifactId>devtool</artifactId>
+                        <version>0.0.1</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
 
