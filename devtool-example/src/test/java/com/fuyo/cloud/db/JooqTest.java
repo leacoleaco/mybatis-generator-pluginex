@@ -12,6 +12,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.fuyo.cloud.db.biz.test.jooq.test.tables.TTest1.T_TEST1;
 
@@ -37,15 +39,19 @@ public class JooqTest {
     @Test
     public void test() {
 
+        Map<String, Object> params = new HashMap<>();
+        params.put("wale_dateTime", "2020-09-27 00:00:00");
+
         String s = dslContext
                 .select(T_TEST1.ID,
                         T_TEST1.NAME,
                         T_TEST1.DATE_TIME
                 )
                 .from(T_TEST1)
-                .where(T_TEST1.DATE_TIME.ge(LocalDateTime.now().plusDays(-3)))
+                .where(T_TEST1.buildConditionByUrl(params))
                 .and(T_TEST1.DATE_TIME.ge(LocalDateTime.now().plusDays(-3)))
                 .limit(2)
+                .fetch()
                 .toString();
 
         System.out.println(s);
@@ -54,6 +60,10 @@ public class JooqTest {
     @Test
     public void testRecord() {
         SelectQuery<Record> query = dslContext.selectQuery();
+
+
+
+
 
 //        Condition condition= T_TEST1.buildWithUrlParam();
 //
