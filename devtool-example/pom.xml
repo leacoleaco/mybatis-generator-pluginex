@@ -121,12 +121,12 @@
                 <configuration>
                     <jdbc>
                         <driver>com.mysql.cj.jdbc.Driver</driver>
-                        <url>jdbc:mysql://192.168.0.12:3306/test?serverTimezone=Asia/Shanghai</url>
-                        <user>leaco</user>
-                        <password>asdfghjkl</password>
-                        <!--                        <url>jdbc:mysql://127.0.0.1:3306/test?serverTimezone=Asia/Shanghai</url>-->
-                        <!--                        <user>root</user>-->
-                        <!--                        <password>root</password>-->
+                        <!--<url>jdbc:mysql://192.168.0.12:3306/test?serverTimezone=Asia/Shanghai</url>-->
+                        <!--<user>leaco</user>-->
+                        <!--<password>asdfghjkl</password>-->
+                        <url>jdbc:mysql://127.0.0.1:3306/test?serverTimezone=Asia/Shanghai</url>
+                        <user>root</user>
+                        <password>root</password>
                     </jdbc>
                     <generator>
                         <name>com.fuyo.jooq.generator.EnumGenerator</name>
