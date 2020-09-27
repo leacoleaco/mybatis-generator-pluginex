@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jooq.Condition;
+import org.jooq.Context;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
@@ -22,6 +24,7 @@ import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
+import org.jooq.impl.CustomCondition;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
@@ -32,12 +35,195 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TTest1 extends TableImpl<TTest1Record> {
 
-    private static final long serialVersionUID = 814165756;
+    private static final long serialVersionUID = 887927511;
 
     /**
      * The reference instance of <code>test.t_test1</code>
      */
     public static final TTest1 T_TEST1 = new TTest1();
+
+    /**
+     * 从url参数中构建条件
+     */
+    public Condition buildWithUrlParam(java.util.Map<String, Object> params){
+        return null;
+    }
+
+    /**
+     * 通过字符串解析列属性
+     */
+    public Field parse(String property) {
+        if (property == null) {
+            throw new IllegalArgumentException("property can not be  null");
+        }
+        String _p = property.replaceAll("_", "").toLowerCase();
+        switch (_p) {
+            case "id":
+                return this.ID;
+            case "name":
+                return this.NAME;
+            case "datetime":
+                return this.DATE_TIME;
+            case "type":
+                return this.TYPE;
+            default: break;
+        }
+        throw new IllegalArgumentException("can not found property");
+    }
+    private Condition condition() {
+        return new CustomCondition() {
+            @Override
+            public void accept(Context<?> ctx) {
+                ctx.sql("1 = 1");
+            }
+        };
+    }
+
+    /**
+     * 从url参数中构建条件
+     */
+    public Condition buildConditionByUrl(java.util.Map<String, Object> params){
+        Condition condition = condition();
+        if (params == null) {
+            return condition;
+        }
+        SQLFilter.filter(params);
+        java.util.Iterator entries = params.entrySet().iterator();
+        while (entries.hasNext()) {
+            java.util.Map.Entry entry = (java.util.Map.Entry) entries.next();
+            String expression = entry.getKey().toString();
+            String value = entry.getValue().toString();
+            if (java.util.regex.Pattern.matches("w[a-z]{3}_[a-zA-Z]+", expression)) {
+                solveCondition(condition, expression, value);
+            }
+        }
+        return condition;
+    }
+
+    private void solveCondition(Condition condition, String expression, String value) {
+        if (expression == null || "" == expression) {
+            return;
+        }
+        String logicExp = expression.substring(1, 2);
+        boolean isAnd = "a".equalsIgnoreCase(logicExp);
+        String compPrefix = expression.substring(2, 4);
+        String propName = SQLFilter.escape(expression.substring(5));
+        Field field = parse(propName);
+        switch (compPrefix) {
+            case "eq":
+                if (value != null) {
+                    if (isAnd) {
+                        condition.and(field.eq(value));
+                    } else {
+                        condition.or(field.eq(value));
+                    }
+                }
+                break;
+            case "ne":
+                if (value != null) {
+                    if (isAnd) {
+                        condition.and(field.ne(value));
+                    } else {
+                        condition.or(field.ne(value));
+                    }
+                }
+                break;
+            case "gt":
+                if (value != null) {
+                    if (isAnd) {
+                        condition.and(field.gt(value));
+                    } else {
+                        condition.or(field.gt(value));
+                    }
+                }
+                break;
+            case "ge":
+                if (value != null) {
+                    if (isAnd) {
+                        condition.and(field.ge(value));
+                    } else {
+                        condition.or(field.ge(value));
+                    }
+                }
+                break;
+            case "lt":
+                if (value != null) {
+                    if (isAnd) {
+                        condition.and(field.lt(value));
+                    } else {
+                        condition.or(field.lt(value));
+                    }
+                }
+                break;
+            case "le":
+                if (value != null) {
+                    if (isAnd) {
+                        condition.and(field.le(value));
+                    } else {
+                        condition.or(field.le(value));
+                    }
+                }
+                break;
+            case "lk":
+                if (value != null) {
+                    if (isAnd) {
+                        condition.and(field.like("%" + value + "%"));
+                    } else {
+                        condition.or(field.like("%" + value + "%"));
+                    }
+                }
+                break;
+            case "in":
+                if (value instanceof String) {
+                    String v = (String) value;
+                    if (v != null && !"".equals(v)) {
+                        String[] split = v.split(",");
+                        if (split != null && split.length > 0) {
+                            java.util.ArrayList<String> strings = new java.util.ArrayList<>();
+                            for (String s : split) {
+                                strings.add(s);
+                            }
+                            if (isAnd) {
+                                condition.and(field.in(strings));
+                            } else {
+                                condition.or(field.in(strings));
+                            }
+                        }
+                    }
+                }
+                break;
+            case "ep":
+                if (isAnd) {
+                    condition.and(field.eq(""));
+                } else {
+                    condition.or(field.eq(""));
+                }
+                break;
+            case "np":
+                if (isAnd) {
+                    condition.and(field.ne(""));
+                } else {
+                    condition.or(field.ne(""));
+                }
+                break;
+            case "eu":
+                if (isAnd) {
+                    condition.and(field.isNull());
+                } else {
+                    condition.or(field.isNull());
+                }
+                break;
+            case "nu":
+                if (isAnd) {
+                    condition.and(field.isNotNull());
+                } else {
+                    condition.or(field.isNotNull());
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
     /**
      * The class holding records for this type
@@ -46,7 +232,85 @@ public class TTest1 extends TableImpl<TTest1Record> {
     public Class<TTest1Record> getRecordType() {
         return TTest1Record.class;
     }
+    static class SQLFilter {
+        public static final String ESCAPE_START_STR = "$";
+        public static final String ESCAPE_END_STR = "_";
+        public static final java.util.Map<String, String> KEYWORDS;
 
+        static {
+            KEYWORDS = new java.util.HashMap<String, String>() {{
+                put("mastor", "master");
+                put("clr", "truncate");
+                put("ins", "insert");
+                put("sel", "select");
+                put("del", "delete");
+                put("upt", "update");
+                put("def", "declare");
+                put("alt", "alert");
+                put("dpt", "drop");
+            }};
+        }
+
+        protected static String filterSqlInject(String str) {
+            if (isBlank(str)) {
+                return null;
+            }
+            //去掉'|"|;|\字符
+            str = str.replace("'", "");
+            str = str.replace("\"", "");
+            str = str.replace(";", "");
+            str = str.replace("\\", "");
+            //转换成小写
+            str = str.toLowerCase();
+            //判断是否包含非法字符
+            java.util.Set<java.util.Map.Entry<String, String>> entries = KEYWORDS.entrySet();
+            for (java.util.Map.Entry<String, String> entry : entries) {
+                String keyword = entry.getValue();
+                if (str.contains(keyword)) {
+                    throw new IllegalArgumentException("parameter \"" + str + "\"contains illegal characters:\"" + keyword + "\", please use escape characters:\"" + ESCAPE_START_STR + entry.getKey() + ESCAPE_END_STR + "\"");
+                }
+            }
+            return str;
+        }
+
+        private static boolean isBlank(String str) {
+            int strLen;
+            if (str == null || (strLen = str.length()) == 0) {
+                return true;
+            }
+            for (int i = 0; i < strLen; i++) {
+                if ((!Character.isWhitespace(str.charAt(i)))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private static String escape(String str) {
+            if (str == null || "".equals(str) || !str.contains(ESCAPE_START_STR) || !str.contains(ESCAPE_END_STR)) {
+                return str;
+            }
+            java.util.Set<java.util.Map.Entry<String, String>> entries = KEYWORDS.entrySet();
+            for (java.util.Map.Entry<String, String> entry : entries) {
+                String esWord = entry.getKey();
+                String realWord = entry.getValue();
+                str = str.replace(ESCAPE_START_STR + esWord + ESCAPE_END_STR, realWord);
+            }
+            return str;
+        }
+
+        protected static void filter(java.util.Map<String, Object> params) {
+            //校验url参数
+            for (java.util.Map.Entry<String, Object> entry : params.entrySet()) {
+                String expression = entry.getKey();
+                String value = entry.getValue().toString();
+                //防止sql注入
+                // 防止SQL注入（因为sidx、order是通过拼接SQL实现排序的，会有SQL注入风险）
+                filterSqlInject(expression);
+                filterSqlInject(value);
+            }
+        }
+    }
     /**
      * The column <code>test.t_test1.id</code>.
      */

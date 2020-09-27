@@ -129,7 +129,7 @@
                         <password>root</password>
                     </jdbc>
                     <generator>
-                        <name>com.fuyo.jooq.generator.EnumGenerator</name>
+                        <name>com.fuyo.jooq.generator.FJavaGenerator</name>
                         <generate>
                             <pojos>true</pojos>
                             <interfaces>true</interfaces>
