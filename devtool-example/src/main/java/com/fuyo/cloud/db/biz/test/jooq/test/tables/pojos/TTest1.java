@@ -15,12 +15,12 @@ import java.time.LocalDateTime;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TTest1 implements ITTest1 {
 
-    private static final long serialVersionUID = -711430086;
+    private static final long serialVersionUID = -463958444;
 
     private Integer       id;
     private String        name;
     private LocalDateTime dateTime;
-    private Integer       type;
+    private Byte          type;
 
     public TTest1() {}
 
@@ -35,7 +35,7 @@ public class TTest1 implements ITTest1 {
         Integer       id,
         String        name,
         LocalDateTime dateTime,
-        Integer       type
+        Byte          type
     ) {
         this.id = id;
         this.name = name;
@@ -74,12 +74,12 @@ public class TTest1 implements ITTest1 {
     }
 
     @Override
-    public Integer getType() {
+    public Byte getType() {
         return this.type;
     }
 
     @Override
-    public void setType(Integer type) {
+    public void setType(Byte type) {
         this.type = type;
     }
 

@@ -45,14 +45,14 @@ public interface ITTest1 extends Serializable {
     public LocalDateTime getDateTime();
 
     /**
-     * Setter for <code>test.t_test1.type</code>.
+     * Setter for <code>test.t_test1.type</code>. test[start(1):开始,end(2):結束]
      */
-    public void setType(Integer value);
+    public void setType(Byte value);
 
     /**
-     * Getter for <code>test.t_test1.type</code>.
+     * Getter for <code>test.t_test1.type</code>. test[start(1):开始,end(2):結束]
      */
-    public Integer getType();
+    public Byte getType();
 
     // -------------------------------------------------------------------------
     // FROM and INTO

@@ -32,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TTest1Part extends TableImpl<TTest1PartRecord> {
 
-    private static final long serialVersionUID = -1509163427;
+    private static final long serialVersionUID = 1929287634;
 
     /**
      * The reference instance of <code>test.t_test1_part</code>
@@ -68,9 +68,9 @@ public class TTest1Part extends TableImpl<TTest1PartRecord> {
     public final TableField<TTest1PartRecord, LocalDateTime> DATE_TIME = createField(DSL.name("date_time"), org.jooq.impl.SQLDataType.LOCALDATETIME, this, "");
 
     /**
-     * The column <code>test.t_test1_part.type</code>.
+     * The column <code>test.t_test1_part.type</code>. test[start(1):开始,end(2):結束]
      */
-    public final TableField<TTest1PartRecord, Integer> TYPE = createField(DSL.name("type"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<TTest1PartRecord, Byte> TYPE = createField(DSL.name("type"), org.jooq.impl.SQLDataType.TINYINT, this, "test[start(1):开始,end(2):結束]");
 
     /**
      * Create a <code>test.t_test1_part</code> table reference
@@ -151,7 +151,7 @@ public class TTest1Part extends TableImpl<TTest1PartRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<Integer, Integer, String, LocalDateTime, Integer> fieldsRow() {
+    public Row5<Integer, Integer, String, LocalDateTime, Byte> fieldsRow() {
         return (Row5) super.fieldsRow();
     }
 }

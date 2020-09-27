@@ -109,14 +109,14 @@ public class TTest1PartDao extends DAOImpl<TTest1PartRecord, com.fuyo.cloud.db.b
     /**
      * Fetch records that have <code>type BETWEEN lowerInclusive AND upperInclusive</code>
      */
-    public List<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1Part> fetchRangeOfType(Integer lowerInclusive, Integer upperInclusive) {
+    public List<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1Part> fetchRangeOfType(Byte lowerInclusive, Byte upperInclusive) {
         return fetchRange(TTest1Part.T_TEST1_PART.TYPE, lowerInclusive, upperInclusive);
     }
 
     /**
      * Fetch records that have <code>type IN (values)</code>
      */
-    public List<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1Part> fetchByType(Integer... values) {
+    public List<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1Part> fetchByType(Byte... values) {
         return fetch(TTest1Part.T_TEST1_PART.TYPE, values);
     }
 }
