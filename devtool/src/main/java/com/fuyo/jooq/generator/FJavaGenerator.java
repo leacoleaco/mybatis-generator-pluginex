@@ -1,25 +1,22 @@
 package com.fuyo.jooq.generator;
 
 import org.apache.commons.lang3.RegExUtils;
-import org.jooq.Condition;
-import org.jooq.Context;
-import org.jooq.Field;
+import org.jooq.*;
 import org.jooq.codegen.GeneratorStrategy;
 import org.jooq.codegen.JavaGenerator;
 import org.jooq.codegen.JavaWriter;
 import org.jooq.impl.CustomCondition;
 import org.jooq.meta.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiFunction;
+import java.util.regex.Pattern;
 
 public class FJavaGenerator extends JavaGenerator {
-    private static final Logger log = LoggerFactory.getLogger(FJavaGenerator.class);
+
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(FJavaGenerator.class);
 
     @Override
     protected void generateTable(SchemaDefinition schema, TableDefinition table) {
@@ -46,21 +43,28 @@ public class FJavaGenerator extends JavaGenerator {
     @Override
     protected void printRecordTypeMethod(JavaWriter out, Definition definition) {
 
-        TableDefinition table = (TableDefinition) definition;
+        try {
 
 
-        //生成从url参数中构建的方法
-        this.generateBuildWithParamMethod(out, table);
-
-        this.generateParseMethod(out, table);
-        this.generaterBuildConditionByUrl(out, table);
+            TableDefinition table = (TableDefinition) definition;
 
 
-        super.printRecordTypeMethod(out, definition);
+            //生成从url参数中构建的方法
+            this.generateBuildWithParamMethod(out, table);
 
-        //生成内部辅助类
-        ClassGenerateUtil.generateSqlFilterInnerClass(out);
+            this.generateParseMethod(out, table);
+            this.generaterConditionFormMethod(out, table);
+            this.generateSortFormMethod(out, table);
 
+
+            super.printRecordTypeMethod(out, definition);
+
+            //生成内部辅助类
+            ClassGenerateUtil.generateSqlFilterInnerClass(out);
+
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 
     protected void generateBuildWithParamMethod(JavaWriter out, TableDefinition table) {
@@ -97,23 +101,7 @@ public class FJavaGenerator extends JavaGenerator {
         return org.apache.commons.lang3.StringUtils.lowerCase(res);
     }
 
-    private String ref(String clazzOrId, int keepSegments) {
-        return clazzOrId == null ? null : ref(Arrays.asList(clazzOrId), keepSegments).get(0);
-    }
-
-    private List<String> ref(List<String> clazzOrId, int keepSegments) {
-        return clazzOrId == null ? Collections.<String>emptyList() : clazzOrId;
-    }
-
-    private int colRefSegments(TypedElementDefinition<?> column) {
-        if (column != null && column.getContainer() instanceof UDTDefinition)
-            return 2;
-        if (!getStrategy().getInstanceFields())
-            return 2;
-        return 3;
-    }
-
-    protected void generaterBuildConditionByUrl(JavaWriter out, TableDefinition table) {
+    protected void generaterConditionFormMethod(JavaWriter out, TableDefinition table) {
 
         // enum opera
         out.tab(1).println("protected enum Opera {\n" +
@@ -165,7 +153,7 @@ public class FJavaGenerator extends JavaGenerator {
 
         // method buildConditionByUrl
         out.tab(1).javadoc("从url参数中构建条件");
-        out.tab(1).println("public %s buildConditionByUrl(java.util.Map<String, Object> params){", Condition.class);
+        out.tab(1).println("public %s buildWhere(%s<String, Object> params){", Condition.class, Map.class);
         out.tab(2).println("if (params == null || params.isEmpty()) {");
         out.tab(3).println("return emptyCondition();");
         out.tab(2).println("}");
@@ -173,15 +161,15 @@ public class FJavaGenerator extends JavaGenerator {
                            "        java.util.Iterator entries = params.entrySet().iterator();\n" +
                            "        Condition condition = null;\n" +
                            "        while (entries.hasNext()) {\n" +
-                           "            java.util.Map.Entry entry = (java.util.Map.Entry) entries.next();\n" +
+                           "            %s.Entry entry = (%s.Entry) entries.next();\n" +
                            "            String expression = entry.getKey().toString();\n" +
                            "            String value = entry.getValue().toString();\n" +
-                           "            if (java.util.regex.Pattern.matches(\"w[a-z]{3}_[a-zA-Z$_]+\", expression)) {\n" +
+                           "            if (%s.matches(\"w[a-z]{3}_[a-zA-Z$_]+\", expression)) {\n" +
                            "                condition = solveCondition(condition, expression, value);\n" +
                            "            }\n" +
                            "        }\n" +
                            "        return condition;\n" +
-                           "    }\n"
+                           "    }\n", Map.class, Map.class, Pattern.class
         );
 
 
@@ -267,5 +255,39 @@ public class FJavaGenerator extends JavaGenerator {
                            "        throw new IllegalArgumentException(\"expression compare word error\");\n" +
                            "    }"
         );
+    }
+
+    protected void generateSortFormMethod(JavaWriter out, TableDefinition table) {
+        out.javadoc("从url参数中构建排序");
+        out.print("public %s[] buildOrderBy(Map<String, Object> params) {\n", SortField.class);
+        out.println(
+                "        if (params == null || params.isEmpty()) {\n" +
+                "            return new SortField[0];\n" +
+                "        }\n" +
+                "        SQLFilter.filter(params);\n" +
+                "        return params.entrySet().stream()\n" +
+                "                .map(entry -> {\n" +
+                "                    String expression = entry.getKey().toString();\n" +
+                "                    String value = entry.getValue().toString();\n" +
+                "                    if (Pattern.matches(\"o(a|d)_[$_a-zA-Z]+\", expression)) {\n" +
+                "                        String orderPrefix = expression.substring(1, 2);\n" +
+                "                        String propName = SQLFilter.escape(expression.substring(3));\n" +
+                "                        Field field = parse(propName);\n" +
+                "                        switch (orderPrefix) {\n" +
+                "                            case \"a\":\n" +
+                "                                return field.sort(%s.ASC);\n" +
+                "                            case \"d\":\n" +
+                "                                return field.sort(%s.DESC);\n" +
+                "                            default:\n" +
+                "                                throw new %s();\n" +
+                "                        }\n" +
+                "                    } else {\n" +
+                "                        return null;\n" +
+                "                    }\n" +
+                "                })\n" +
+                "                .filter(%s::nonNull)\n" +
+                "                .toArray(SortField[]::new);\n" +
+                "    }", SortOrder.class, SortOrder.class, AssertionError.class, Objects.class);
+
     }
 }
