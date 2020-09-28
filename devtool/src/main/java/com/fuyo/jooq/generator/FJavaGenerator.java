@@ -285,24 +285,21 @@ public class FJavaGenerator extends JavaGenerator {
                 "        }\n" +
                 "        SQLFilter.filter(params);\n" +
                 "        return params.entrySet().stream()\n" +
-                "                .sorted((x, y) -> compareValue(x, y))\n" +
+                "                .filter(x -> Pattern.matches(\"o(a|d)_[$_a-zA-Z]+\", x.getKey()))\n" +
+                "                .sorted((x, y) -> compareValue(x.getValue(), y.getValue()))\n" +
                 "                .map(entry -> {\n" +
-                "                    String expression = entry.getKey().toString();\n" +
+                "                    String expression = entry.getKey();\n" +
                 "                    String value = entry.getValue().toString();\n" +
-                "                    if (Pattern.matches(\"o(a|d)_[$_a-zA-Z]+\", expression)) {\n" +
-                "                        String orderPrefix = expression.substring(1, 2);\n" +
-                "                        String propName = SQLFilter.escape(expression.substring(3));\n" +
-                "                        Field field = parse(propName);\n" +
-                "                        switch (orderPrefix) {\n" +
-                "                            case \"a\":\n" +
-                "                                return field.sort(%s.ASC);\n" +
-                "                            case \"d\":\n" +
-                "                                return field.sort(%s.DESC);\n" +
-                "                            default:\n" +
-                "                                throw new %s();\n" +
-                "                        }\n" +
-                "                    } else {\n" +
-                "                        return null;\n" +
+                "                    String orderPrefix = expression.substring(1, 2);\n" +
+                "                    String propName = SQLFilter.escape(expression.substring(3));\n" +
+                "                    Field field = parse(propName);\n" +
+                "                    switch (orderPrefix) {\n" +
+                "                        case \"a\":\n" +
+                "                            return field.sort(%s.ASC);\n" +
+                "                        case \"d\":\n" +
+                "                            return field.sort(%s.DESC);\n" +
+                "                        default:\n" +
+                "                            throw new %s();\n" +
                 "                    }\n" +
                 "                })\n" +
                 "                .filter(%s::nonNull)\n" +
