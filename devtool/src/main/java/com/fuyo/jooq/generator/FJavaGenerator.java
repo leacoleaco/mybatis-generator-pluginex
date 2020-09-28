@@ -19,28 +19,6 @@ public class FJavaGenerator extends JavaGenerator {
     private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(FJavaGenerator.class);
 
     @Override
-    protected void generateTable(SchemaDefinition schema, TableDefinition table) {
-
-        //生成 table.java
-        super.generateTable(schema, table);
-
-        //生成 TableQueryBuilder.java
-//        this.generateTableQueryBuilder(schema, table);
-
-    }
-
-    protected void generateTableQueryBuilder(SchemaDefinition schema, TableDefinition table) {
-        String dir = getTargetDirectory();
-        String javaPackageName = getStrategy().getJavaPackageName(table) + ".builders";
-
-        String pkg = javaPackageName.replaceAll("\\.", "/");
-        File file = new File(dir + "/" + pkg, getStrategy().getJavaClassName(table, GeneratorStrategy.Mode.DEFAULT) + "QueryBuilder.java");
-        JavaWriter out = newJavaWriter(file);
-        generateTable(table, out);
-        closeJavaWriter(out);
-    }
-
-    @Override
     protected void printRecordTypeMethod(JavaWriter out, Definition definition) {
 
         super.printRecordTypeMethod(out, definition);
