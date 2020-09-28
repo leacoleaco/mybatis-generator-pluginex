@@ -258,14 +258,39 @@ public class FJavaGenerator extends JavaGenerator {
     }
 
     protected void generateSortFormMethod(JavaWriter out, TableDefinition table) {
-        out.javadoc("从url参数中构建排序");
-        out.print("public %s[] buildOrderBy(Map<String, Object> params) {\n", SortField.class);
+
         out.println(
+                "    private static int compareValue(Object a, Object b) {\n" +
+                "        if (a == null) {\n" +
+                "            return -1;\n" +
+                "        } else if (b == null) {\n" +
+                "            return 1;\n" +
+                "        } else {\n" +
+                "            int _a;\n" +
+                "            try {\n" +
+                "                _a = Integer.parseInt(a.toString());\n" +
+                "            } catch (Exception e) {\n" +
+                "                return -1;\n" +
+                "            }\n" +
+                "            int _b;\n" +
+                "            try {\n" +
+                "                _b = Integer.parseInt(b.toString());\n" +
+                "            } catch (Exception e) {\n" +
+                "                return 1;\n" +
+                "            }\n" +
+                "            return Integer.compare(_a, _b);\n" +
+                "        }\n" +
+                "    }");
+
+        out.javadoc("从url参数中构建排序");
+        out.tab(1).println("public %s[] buildOrderBy(Map<String, Object> params) {\n", SortField.class);
+        out.tab(2).println(
                 "        if (params == null || params.isEmpty()) {\n" +
                 "            return new SortField[0];\n" +
                 "        }\n" +
                 "        SQLFilter.filter(params);\n" +
                 "        return params.entrySet().stream()\n" +
+                "                .sorted((x, y) -> compareValue(x, y))\n" +
                 "                .map(entry -> {\n" +
                 "                    String expression = entry.getKey().toString();\n" +
                 "                    String value = entry.getValue().toString();\n" +
