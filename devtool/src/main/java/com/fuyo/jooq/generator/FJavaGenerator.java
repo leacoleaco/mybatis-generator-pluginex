@@ -43,21 +43,16 @@ public class FJavaGenerator extends JavaGenerator {
     @Override
     protected void printRecordTypeMethod(JavaWriter out, Definition definition) {
 
+        super.printRecordTypeMethod(out, definition);
+
         try {
-
-
             TableDefinition table = (TableDefinition) definition;
-
-
             //生成从url参数中构建的方法
             this.generateBuildWithParamMethod(out, table);
 
             this.generateParseMethod(out, table);
             this.generaterConditionFormMethod(out, table);
             this.generateSortFormMethod(out, table);
-
-
-            super.printRecordTypeMethod(out, definition);
 
             //生成内部辅助类
             ClassGenerateUtil.generateSqlFilterInnerClass(out);
@@ -282,9 +277,9 @@ public class FJavaGenerator extends JavaGenerator {
                 "        }\n" +
                 "    }");
 
-        out.javadoc("从url参数中构建排序");
+        out.tab(1).javadoc("从url参数中构建排序");
         out.tab(1).println("public %s[] buildOrderBy(Map<String, Object> params) {\n", SortField.class);
-        out.tab(2).println(
+        out.tab(1).println(
                 "        if (params == null || params.isEmpty()) {\n" +
                 "            return new SortField[0];\n" +
                 "        }\n" +
