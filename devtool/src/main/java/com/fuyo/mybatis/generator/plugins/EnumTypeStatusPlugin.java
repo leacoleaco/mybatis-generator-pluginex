@@ -331,16 +331,16 @@ public class EnumTypeStatusPlugin extends BasePlugin implements ILogicalDeletePl
             mParse.setStatic(true);
             mParse.setVisibility(JavaVisibility.PUBLIC);
             mParse.addParameter(new Parameter(fValue.getType(), "value"));
-            mParse.setReturnType(new FullyQualifiedJavaType(enumName));
+            mParse.setReturnType(new FullyQualifiedJavaType("java.util.Optional<" + enumName + ">"));
             mParse.addBodyLine("if(value==null){");
-            mParse.addBodyLine("return null;");
+            mParse.addBodyLine("return java.util.Optional.empty();");
             mParse.addBodyLine("}");
             mParse.addBodyLine("for (" + enumName + " o: values()) {");
             mParse.addBodyLine("if(o.value.equals(value)){");
-            mParse.addBodyLine("return o;");
+            mParse.addBodyLine("return java.util.Optional.ofNullable(o);");
             mParse.addBodyLine("}");
             mParse.addBodyLine("}");
-            mParse.addBodyLine("return null;");
+            mParse.addBodyLine("return java.util.Optional.empty();");
             commentGenerator.addGeneralMethodComment(mParse, introspectedTable);
             FormatTools.addMethodWithBestPosition(innerEnum, mParse);
 
@@ -392,7 +392,15 @@ public class EnumTypeStatusPlugin extends BasePlugin implements ILogicalDeletePl
                 if ("NULL".equalsIgnoreCase(value)) {
                     return "null";
                 } else {
-                    return "new " + javaType + "(\"" + value + "\")";
+                    if ("boolean".equals(javaType.toLowerCase())) {
+                        if ("0".equals(this.value)) {
+                            return "false";
+                        } else {
+                            return "true";
+                        }
+                    } else {
+                        return "new " + javaType + "(\"" + value + "\")";
+                    }
                 }
             }
 
