@@ -9,8 +9,13 @@ import com.fuyo.cloud.db.biz.test.jooq.test.tables.records.TTest1Record;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.jooq.Configuration;
+import org.jooq.SelectLimitStep;
+import org.jooq.SelectQuery;
+import org.jooq.conf.ParamType;
 import org.jooq.impl.DAOImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -104,5 +109,54 @@ public class TTest1Dao extends DAOImpl<TTest1Record, com.fuyo.cloud.db.biz.test.
      */
     public List<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1> fetchByType(Byte... values) {
         return fetch(TTest1.T_TEST1.TYPE, values);
+    }
+     public SelectQuery<TTest1Record> createQuery() {
+        SelectQuery<TTest1Record> query = ctx().selectQuery(getTable());
+        return query;
+    }
+    public SelectQuery<TTest1Record> createQuery(Map<String, Object> params) {
+        SelectQuery<TTest1Record> query = createQuery();
+        query.addConditions(com.fuyo.cloud.db.biz.test.jooq.test.tables.TTest1.T_TEST1.buildWhere(params));
+        query.addOrderBy(com.fuyo.cloud.db.biz.test.jooq.test.tables.TTest1.T_TEST1.buildOrderBy(params));
+        return query;
+    }
+
+    /**
+     * 查询分页
+     */
+    public com.github.pagehelper.Page<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1> fetchPage(SelectQuery<?> query, Map<String, Object> params) {
+        int page = (int) Optional.ofNullable(params.get("page")).orElse(1);
+        int limit = (int) Optional.ofNullable(params.get("limit")).orElse(10);
+        return fetchPage(query, page, limit);
+    }
+
+    /**
+     * 查询分页
+     */
+    public com.github.pagehelper.Page<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1> fetchPage(SelectQuery<?> query, int pageNum, int pageSize) {
+        com.github.pagehelper.Page<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1> page = com.github.pagehelper.PageHelper.startPage(pageNum, pageSize);
+        int total = ctx().fetchCount(query);
+        page.setTotal(total);
+        String pageSql = query.getSQL(ParamType.INLINED) + " limit ?,?";
+        List<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1> list =
+                ctx().fetch(pageSql, page.getStartRow(), page.getPageSize()).into(this.getType());
+        page.clear();
+        page.addAll(list);
+        return page;
+    }
+
+    /**
+     * 查询分页
+     */
+    public com.github.pagehelper.Page<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1> fetchPage(SelectLimitStep<?> selectLimitStep,int pageNum, int pageSize) {
+        com.github.pagehelper.Page<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1> page = com.github.pagehelper.PageHelper.startPage(pageNum, pageSize);
+        int total = ctx().fetchCount(selectLimitStep);
+        page.setTotal(total);
+        String pageSql = selectLimitStep.getSQL(ParamType.INLINED) + " limit ?,?";
+        List<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1> list =
+                ctx().fetch(pageSql, page.getStartRow(), page.getPageSize()).into(this.getType());
+        page.clear();
+        page.addAll(list);
+        return page;
     }
 }

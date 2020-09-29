@@ -11,6 +11,12 @@ import com.fuyo.cloud.db.biz.test.jooq.test.tables.records.TTest1Record;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.jooq.Condition;
 import org.jooq.Context;
@@ -20,6 +26,8 @@ import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Row4;
 import org.jooq.Schema;
+import org.jooq.SortField;
+import org.jooq.SortOrder;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -35,12 +43,20 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TTest1 extends TableImpl<TTest1Record> {
 
-    private static final long serialVersionUID = 887927511;
+    private static final long serialVersionUID = 2030531626;
 
     /**
      * The reference instance of <code>test.t_test1</code>
      */
     public static final TTest1 T_TEST1 = new TTest1();
+
+    /**
+     * The class holding records for this type
+     */
+    @Override
+    public Class<TTest1Record> getRecordType() {
+        return TTest1Record.class;
+    }
 
     /**
      * 从url参数中构建条件
@@ -68,9 +84,44 @@ public class TTest1 extends TableImpl<TTest1Record> {
                 return this.TYPE;
             default: break;
         }
-        throw new IllegalArgumentException("can not found property");
+        throw new IllegalArgumentException("can not found property" + property);
     }
-    private Condition condition() {
+    protected enum Opera {
+        AND("a", (a, b) -> a.and(b)),
+        OR("o", (a, b) -> a.or(b)),
+        ;
+
+        private final String code;
+        private final BiFunction<Condition, Condition, Condition> action;
+
+        Opera(String code, BiFunction<Condition, Condition, Condition> action) {
+            this.code = code;
+            this.action = action;
+        }
+
+        protected final Condition operate(Condition a, Condition b) {
+            if (a == null) {
+                return b;
+            } else if (b == null) {
+                return a;
+            }
+            return action.apply(a, b);
+        }
+
+        protected static Opera parse(String code) {
+            if (code == null) {
+                throw new IllegalArgumentException("opera code error");
+            }
+            String _code = code.toLowerCase();
+            for (Opera value : values()) {
+                if (value.code.equals(_code)) {
+                    return value;
+                }
+            }
+            throw new IllegalArgumentException("opera code error,can not found operate:" + code);
+        }
+    }
+    private Condition emptyCondition() {
         return new CustomCondition() {
             @Override
             public void accept(Context<?> ctx) {
@@ -82,97 +133,76 @@ public class TTest1 extends TableImpl<TTest1Record> {
     /**
      * 从url参数中构建条件
      */
-    public Condition buildConditionByUrl(java.util.Map<String, Object> params){
-        Condition condition = condition();
-        if (params == null) {
-            return condition;
+    public Condition buildWhere(Map<String, Object> params){
+        if (params == null || params.isEmpty()) {
+            return emptyCondition();
         }
         SQLFilter.filter(params);
         java.util.Iterator entries = params.entrySet().iterator();
+        Condition condition = null;
         while (entries.hasNext()) {
-            java.util.Map.Entry entry = (java.util.Map.Entry) entries.next();
+            Map.Entry entry = (Map.Entry) entries.next();
             String expression = entry.getKey().toString();
             String value = entry.getValue().toString();
-            if (java.util.regex.Pattern.matches("w[a-z]{3}_[a-zA-Z]+", expression)) {
-                solveCondition(condition, expression, value);
+            if (Pattern.matches("w[a-z]{3}_[a-zA-Z$_]+", expression)) {
+                condition = solveCondition(condition, expression, value);
             }
         }
         return condition;
     }
 
-    private void solveCondition(Condition condition, String expression, String value) {
-        if (expression == null || "" == expression) {
-            return;
+    protected Condition solveCondition(Condition condition, String expression, String value) {
+        if (expression == null || "".equals(expression)) {
+            return condition;
         }
         String logicExp = expression.substring(1, 2);
-        boolean isAnd = "a".equalsIgnoreCase(logicExp);
+        Opera opera = Opera.parse(logicExp);
         String compPrefix = expression.substring(2, 4);
         String propName = SQLFilter.escape(expression.substring(5));
         Field field = parse(propName);
         switch (compPrefix) {
             case "eq":
                 if (value != null) {
-                    if (isAnd) {
-                        condition.and(field.eq(value));
-                    } else {
-                        condition.or(field.eq(value));
-                    }
+                    return opera.operate(condition, field.eq(value));
+                } else {
+                    return condition;
                 }
-                break;
             case "ne":
                 if (value != null) {
-                    if (isAnd) {
-                        condition.and(field.ne(value));
-                    } else {
-                        condition.or(field.ne(value));
-                    }
+                    return opera.operate(condition, field.ne(value));
+                } else {
+                    return condition;
                 }
-                break;
             case "gt":
                 if (value != null) {
-                    if (isAnd) {
-                        condition.and(field.gt(value));
-                    } else {
-                        condition.or(field.gt(value));
-                    }
+                    return opera.operate(condition, field.gt(value));
+                } else {
+                    return condition;
                 }
-                break;
             case "ge":
                 if (value != null) {
-                    if (isAnd) {
-                        condition.and(field.ge(value));
-                    } else {
-                        condition.or(field.ge(value));
-                    }
+                    return opera.operate(condition, field.ge(value));
+                } else {
+                    return condition;
                 }
-                break;
             case "lt":
                 if (value != null) {
-                    if (isAnd) {
-                        condition.and(field.lt(value));
-                    } else {
-                        condition.or(field.lt(value));
-                    }
+                    return opera.operate(condition, field.lt(value));
+                } else {
+                    return condition;
                 }
-                break;
             case "le":
                 if (value != null) {
-                    if (isAnd) {
-                        condition.and(field.le(value));
-                    } else {
-                        condition.or(field.le(value));
-                    }
+                    return opera.operate(condition, field.le(value));
+                } else {
+                    return condition;
                 }
-                break;
             case "lk":
                 if (value != null) {
-                    if (isAnd) {
-                        condition.and(field.like("%" + value + "%"));
-                    } else {
-                        condition.or(field.like("%" + value + "%"));
-                    }
+                    return opera.operate(condition, field.like("%" + value + "%"));
+                } else {
+                    return condition;
                 }
-                break;
             case "in":
                 if (value instanceof String) {
                     String v = (String) value;
@@ -183,54 +213,88 @@ public class TTest1 extends TableImpl<TTest1Record> {
                             for (String s : split) {
                                 strings.add(s);
                             }
-                            if (isAnd) {
-                                condition.and(field.in(strings));
-                            } else {
-                                condition.or(field.in(strings));
-                            }
+                            return opera.operate(condition, field.in(strings));
                         }
                     }
                 }
-                break;
+                return condition;
             case "ep":
-                if (isAnd) {
-                    condition.and(field.eq(""));
-                } else {
-                    condition.or(field.eq(""));
-                }
-                break;
+                return opera.operate(condition, field.eq(""));
             case "np":
-                if (isAnd) {
-                    condition.and(field.ne(""));
-                } else {
-                    condition.or(field.ne(""));
-                }
-                break;
+                return opera.operate(condition, field.ne(""));
             case "eu":
-                if (isAnd) {
-                    condition.and(field.isNull());
-                } else {
-                    condition.or(field.isNull());
-                }
-                break;
+                return opera.operate(condition, field.isNull());
             case "nu":
-                if (isAnd) {
-                    condition.and(field.isNotNull());
-                } else {
-                    condition.or(field.isNotNull());
-                }
-                break;
+                return opera.operate(condition, field.isNotNull());
             default:
                 break;
+        }
+        throw new IllegalArgumentException("expression compare word error");
+    }
+    private static int compareValue(Object a, Object b) {
+        if (a == null) {
+            return -1;
+        } else if (b == null) {
+            return 1;
+        } else {
+            int _a;
+            try {
+                _a = Integer.parseInt(a.toString());
+            } catch (Exception e) {
+                return -1;
+            }
+            int _b;
+            try {
+                _b = Integer.parseInt(b.toString());
+            } catch (Exception e) {
+                return 1;
+            }
+            return Integer.compare(_a, _b);
         }
     }
 
     /**
-     * The class holding records for this type
+     * 从url参数中构建排序
      */
-    @Override
-    public Class<TTest1Record> getRecordType() {
-        return TTest1Record.class;
+     public SortField[] buildOrderBy(Map<String, Object> params, SortField... otherField) {
+        return Stream.concat(
+                Optional.ofNullable(otherField)
+                        .map(Arrays::stream)
+                        .orElse(Stream.empty())
+                        .filter(Objects::nonNull),
+                Arrays.stream(buildOrderBy(params))
+        ).toArray(SortField[]::new);
+    }
+
+    /**
+     * 从url参数中构建排序
+     */
+    public SortField[] buildOrderBy(Map<String, Object> params) {
+
+            if (params == null || params.isEmpty()) {
+            return new SortField[0];
+        }
+        SQLFilter.filter(params);
+        return params.entrySet().stream()
+                .filter(x -> Pattern.matches("o(a|d)_[$_a-zA-Z]+", x.getKey()))
+                .sorted((x, y) -> compareValue(x.getValue(), y.getValue()))
+                .map(entry -> {
+                    String expression = entry.getKey();
+                    String value = entry.getValue().toString();
+                    String orderPrefix = expression.substring(1, 2);
+                    String propName = SQLFilter.escape(expression.substring(3));
+                    Field field = parse(propName);
+                    switch (orderPrefix) {
+                        case "a":
+                            return field.sort(SortOrder.ASC);
+                        case "d":
+                            return field.sort(SortOrder.DESC);
+                        default:
+                            throw new AssertionError();
+                    }
+                })
+                .filter(Objects::nonNull)
+                .toArray(SortField[]::new);
     }
     static class SQLFilter {
         public static final String ESCAPE_START_STR = "$";

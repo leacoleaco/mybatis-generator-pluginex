@@ -5,6 +5,7 @@ import org.jooq.*;
 import org.jooq.codegen.GeneratorStrategy;
 import org.jooq.codegen.JavaGenerator;
 import org.jooq.codegen.JavaWriter;
+import org.jooq.conf.ParamType;
 import org.jooq.impl.CustomCondition;
 import org.jooq.meta.*;
 
@@ -42,6 +43,17 @@ public class FJavaGenerator extends JavaGenerator {
             logger.error(e.getMessage(), e);
         }
     }
+
+    @Override
+    protected void generateDaoClassFooter(TableDefinition table, JavaWriter out) {
+        super.generateDaoClassFooter(table, out);
+
+        this.generateCreateQueryMethod(table, out);
+        this.generateFetchPageMethod(table, out);
+    }
+
+
+    //=============================================================================================
 
     protected void generateBuildWithParamMethod(JavaWriter out, TableDefinition table) {
         out.tab(1).javadoc("从url参数中构建条件");
@@ -298,5 +310,63 @@ public class FJavaGenerator extends JavaGenerator {
                 "                .toArray(SortField[]::new);\n" +
                 "    }", SortOrder.class, SortOrder.class, AssertionError.class, Objects.class);
 
+    }
+
+    private void generateCreateQueryMethod(TableDefinition table, JavaWriter out) {
+        final String recordClassName = out.ref(getStrategy().getFullJavaClassName(table, GeneratorStrategy.Mode.RECORD));
+        final String tableIdentifier = getStrategy().getFullJavaIdentifier(table);
+
+        out.tab(1).println(" public %s<%s> createQuery() {\n" +
+                           "        SelectQuery<%s> query = ctx().selectQuery(getTable());\n" +
+                           "        return query;\n" +
+                           "    }", SelectQuery.class, recordClassName, recordClassName);
+
+        out.tab(1).println("public SelectQuery<%s> createQuery(%s<String, Object> params) {\n" +
+                           "        SelectQuery<%s> query = createQuery();\n" +
+                           "        query.addConditions(%s.buildWhere(params));\n" +
+                           "        query.addOrderBy(%s.buildOrderBy(params));\n" +
+                           "        return query;\n" +
+                           "    }", recordClassName, Map.class, recordClassName, tableIdentifier, tableIdentifier);
+
+
+    }
+
+    private void generateFetchPageMethod(TableDefinition table, JavaWriter out) {
+
+        String pType = out.ref(getStrategy().getFullJavaClassName(table, GeneratorStrategy.Mode.POJO));
+
+        out.tab(1).javadoc("查询分页");
+        out.tab(1).println("public com.github.pagehelper.Page<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1> fetchPage(SelectQuery<?> query, Map<String, Object> params) {\n" +
+                           "        int page = (int) %s.ofNullable(params.get(\"page\")).orElse(1);\n" +
+                           "        int limit = (int) Optional.ofNullable(params.get(\"limit\")).orElse(10);\n" +
+                           "        return fetchPage(query, page, limit);\n" +
+                           "    }", Optional.class);
+
+        out.tab(1).javadoc("查询分页");
+        out.tab(1).println("public com.github.pagehelper.Page<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1> fetchPage(SelectQuery<?> query, int pageNum, int pageSize) {\n" +
+                           "        com.github.pagehelper.Page<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1> page = com.github.pagehelper.PageHelper.startPage(pageNum, pageSize);\n" +
+                           "        int total = ctx().fetchCount(query);\n" +
+                           "        page.setTotal(total);\n" +
+                           "        String pageSql = query.getSQL(ParamType.INLINED) + \" limit ?,?\";\n" +
+                           "        List<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1> list =\n" +
+                           "                ctx().fetch(pageSql, page.getStartRow(), page.getPageSize()).into(this.getType());\n" +
+                           "        page.clear();\n" +
+                           "        page.addAll(list);\n" +
+                           "        return page;\n" +
+                           "    }");
+
+
+        out.tab(1).javadoc("查询分页");
+        out.tab(1).println("public com.github.pagehelper.Page<%s> fetchPage(%s<?> selectLimitStep,int pageNum, int pageSize) {\n" +
+                           "        com.github.pagehelper.Page<%s> page = com.github.pagehelper.PageHelper.startPage(pageNum, pageSize);\n" +
+                           "        int total = ctx().fetchCount(selectLimitStep);\n" +
+                           "        page.setTotal(total);\n" +
+                           "        String pageSql = selectLimitStep.getSQL(%s.INLINED) + \" limit ?,?\";\n" +
+                           "        List<%s> list =\n" +
+                           "                ctx().fetch(pageSql, page.getStartRow(), page.getPageSize()).into(this.getType());\n" +
+                           "        page.clear();\n" +
+                           "        page.addAll(list);\n" +
+                           "        return page;\n" +
+                           "    }", pType, SelectLimitStep.class, pType, ParamType.class, pType);
     }
 }
