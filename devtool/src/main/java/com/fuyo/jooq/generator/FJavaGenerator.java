@@ -9,10 +9,13 @@ import org.jooq.impl.CustomCondition;
 import org.jooq.meta.*;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class FJavaGenerator extends JavaGenerator {
 
@@ -254,6 +257,17 @@ public class FJavaGenerator extends JavaGenerator {
                 "            return Integer.compare(_a, _b);\n" +
                 "        }\n" +
                 "    }");
+
+        out.tab(1).javadoc("从url参数中构建排序");
+        out.tab(1).println(" public SortField[] buildOrderBy(Map<String, Object> params, SortField... otherField) {\n" +
+                           "        return %s.concat(\n" +
+                           "                %s.ofNullable(otherField)\n" +
+                           "                        .map(%s::stream)\n" +
+                           "                        .orElse(Stream.empty())\n" +
+                           "                        .filter(Objects::nonNull),\n" +
+                           "                Arrays.stream(buildOrderBy(params))\n" +
+                           "        ).toArray(SortField[]::new);\n" +
+                           "    }", Stream.class, Optional.class, Arrays.class);
 
         out.tab(1).javadoc("从url参数中构建排序");
         out.tab(1).println("public %s[] buildOrderBy(Map<String, Object> params) {\n", SortField.class);
