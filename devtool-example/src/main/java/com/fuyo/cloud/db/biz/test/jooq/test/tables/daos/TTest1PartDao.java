@@ -138,7 +138,7 @@ public class TTest1PartDao extends DAOImpl<TTest1PartRecord, com.fuyo.cloud.db.b
     /**
      * 查询分页
      */
-    public com.github.pagehelper.Page<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1> fetchPage(SelectQuery<?> query, Map<String, Object> params) {
+    public com.github.pagehelper.Page<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1Part> fetchPage(SelectQuery<?> query, Map<String, Object> params) {
         int page = (int) Optional.ofNullable(params.get("page")).orElse(1);
         int limit = (int) Optional.ofNullable(params.get("limit")).orElse(10);
         return fetchPage(query, page, limit);
@@ -147,12 +147,12 @@ public class TTest1PartDao extends DAOImpl<TTest1PartRecord, com.fuyo.cloud.db.b
     /**
      * 查询分页
      */
-    public com.github.pagehelper.Page<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1> fetchPage(SelectQuery<?> query, int pageNum, int pageSize) {
-        com.github.pagehelper.Page<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1> page = com.github.pagehelper.PageHelper.startPage(pageNum, pageSize);
+    public com.github.pagehelper.Page<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1Part> fetchPage(SelectQuery<?> query, int pageNum, int pageSize) {
+        com.github.pagehelper.Page<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1Part> page = com.github.pagehelper.PageHelper.startPage(pageNum, pageSize);
         int total = ctx().fetchCount(query);
         page.setTotal(total);
         String pageSql = query.getSQL(ParamType.INLINED) + " limit ?,?";
-        List<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1> list =
+        List<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1Part> list =
                 ctx().fetch(pageSql, page.getStartRow(), page.getPageSize()).into(this.getType());
         page.clear();
         page.addAll(list);

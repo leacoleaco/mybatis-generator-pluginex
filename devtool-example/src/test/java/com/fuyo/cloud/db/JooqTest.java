@@ -123,7 +123,7 @@ public class JooqTest {
 
         tTest1Dao.fetchPage(query, 1, 2);
 
-        System.out.println(fetch);
+//        System.out.println(fetch);
 
 
     }

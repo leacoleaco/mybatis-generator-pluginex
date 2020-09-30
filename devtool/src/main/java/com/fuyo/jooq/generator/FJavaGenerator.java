@@ -336,24 +336,24 @@ public class FJavaGenerator extends JavaGenerator {
         String pType = out.ref(getStrategy().getFullJavaClassName(table, GeneratorStrategy.Mode.POJO));
 
         out.tab(1).javadoc("查询分页");
-        out.tab(1).println("public com.github.pagehelper.Page<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1> fetchPage(SelectQuery<?> query, Map<String, Object> params) {\n" +
+        out.tab(1).println("public com.github.pagehelper.Page<%s> fetchPage(SelectQuery<?> query, Map<String, Object> params) {\n" +
                            "        int page = (int) %s.ofNullable(params.get(\"page\")).orElse(1);\n" +
                            "        int limit = (int) Optional.ofNullable(params.get(\"limit\")).orElse(10);\n" +
                            "        return fetchPage(query, page, limit);\n" +
-                           "    }", Optional.class);
+                           "    }", pType, Optional.class);
 
         out.tab(1).javadoc("查询分页");
-        out.tab(1).println("public com.github.pagehelper.Page<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1> fetchPage(SelectQuery<?> query, int pageNum, int pageSize) {\n" +
-                           "        com.github.pagehelper.Page<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1> page = com.github.pagehelper.PageHelper.startPage(pageNum, pageSize);\n" +
+        out.tab(1).println("public com.github.pagehelper.Page<%s> fetchPage(SelectQuery<?> query, int pageNum, int pageSize) {\n" +
+                           "        com.github.pagehelper.Page<%s> page = com.github.pagehelper.PageHelper.startPage(pageNum, pageSize);\n" +
                            "        int total = ctx().fetchCount(query);\n" +
                            "        page.setTotal(total);\n" +
                            "        String pageSql = query.getSQL(ParamType.INLINED) + \" limit ?,?\";\n" +
-                           "        List<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1> list =\n" +
+                           "        List<%s> list =\n" +
                            "                ctx().fetch(pageSql, page.getStartRow(), page.getPageSize()).into(this.getType());\n" +
                            "        page.clear();\n" +
                            "        page.addAll(list);\n" +
                            "        return page;\n" +
-                           "    }");
+                           "    }", pType, pType, pType);
 
 
         out.tab(1).javadoc("查询分页");
