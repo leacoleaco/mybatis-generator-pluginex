@@ -25,8 +25,6 @@
         <plugin type="com.fuyo.mybatis.generator.plugins.SelectOneByExamplePlugin"/>
         <!-- 查询结果选择性返回插件 -->
         <plugin type="com.fuyo.mybatis.generator.plugins.SelectSelectivePlugin"/>
-        <!-- map方式高级查询插件 -->
-        <plugin type="com.fuyo.mybatis.generator.plugins.SelectMapPlugin"/>
         <!-- Example Criteria 增强插件 -->
         <plugin type="com.fuyo.mybatis.generator.plugins.ExampleEnhancedPlugin">
             <!-- 是否支持已经过时的andIf方法（推荐使用when代替），默认支持 -->
@@ -74,13 +72,13 @@
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.fuyo.cloud.db.biz.test.g.dao"
                              targetProject="src/main/java"/>
         <!--表名-->
-        <table tableName="test" alias="test" domainObjectName="GTestDto">
+        <table tableName="t_test1" domainObjectName="GTestDto">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
             <columnOverride column="pictures" javaType="java.lang.String[]"
                             typeHandler="com.fuyo.cloud.db.mybatis.JsonStringArrayTypeHandler"/>
         </table>
 
-        <table tableName="test_part" alias="test_part" domainObjectName="GTestPartDto">
+        <table tableName="t_test1_part" domainObjectName="GTestPartDto">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
             <columnOverride column="pictures" javaType="java.lang.String[]"
                             typeHandler="com.fuyo.cloud.db.mybatis.JsonStringArrayTypeHandler"/>
