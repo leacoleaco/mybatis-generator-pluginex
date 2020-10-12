@@ -94,7 +94,7 @@ public class BuildWithUrlParamPlugin extends BasePlugin {
                         "\n" +
                         "        //构建page参数\n" +
                         "        this.page = java.util.Optional.ofNullable(params.get(\"page\")).map(Object::toString).map(Integer::valueOf).orElse(1);\n" +
-                        "        this.pageSize = java.util.Optional.ofNullable(params.get(\"limit\")).map(Object::toString).map(Integer::valueOf).orElse(10);\n" +
+                        "        this.pageSize = java.util.Optional.ofNullable(java.util.Optional.ofNullable(params.get(\"limit\")).orElse(params.get(\"pageSize\"))).map(Object::toString).map(Integer::valueOf).orElse(10);\n" +
                         "\n" +
                         "        //构建where\n" +
                         "        buildWhere(urlCriteria, entries);\n" +

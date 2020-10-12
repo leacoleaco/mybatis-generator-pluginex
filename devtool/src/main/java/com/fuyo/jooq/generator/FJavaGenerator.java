@@ -328,14 +328,14 @@ public class FJavaGenerator extends JavaGenerator {
         out.tab(1).println("public com.github.pagehelper.Page<%s> fetchPage(Map<String, Object> params) {\n" +
                 "        SelectQuery<%s> query = createQuery(params);\n" +
                 "        int page = (int) %s.ofNullable(params.get(\"page\")).map(Object::toString).map(Integer::parseInt).orElse(1);\n" +
-                "        int limit = (int) Optional.ofNullable(params.get(\"limit\")).map(Object::toString).map(Integer::parseInt).orElse(10);\n" +
+                "        int limit = (int) Optional.ofNullable(java.util.Optional.ofNullable(params.get(\"limit\")).orElse(params.get(\"pageSize\"))).map(Object::toString).map(Integer::parseInt).orElse(10);\n" +
                 "        return fetchPage(query, page, limit);\n" +
                 "    }", pType, recordClassName, Optional.class);
 
         out.tab(1).javadoc("查询分页");
         out.tab(1).println("public com.github.pagehelper.Page<%s> fetchPage(SelectQuery<?> query, Map<String, Object> params) {\n" +
                 "        int page = (int) %s.ofNullable(params.get(\"page\")).map(Object::toString).map(Integer::parseInt).orElse(1);\n" +
-                "        int limit = (int) Optional.ofNullable(params.get(\"limit\")).map(Object::toString).map(Integer::parseInt).orElse(10);\n" +
+                "        int limit = (int) Optional.ofNullable(java.util.Optional.ofNullable(params.get(\"limit\")).orElse(params.get(\"pageSize\"))).map(Object::toString).map(Integer::parseInt).orElse(10);\n" +
                 "        return fetchPage(query, page, limit);\n" +
                 "    }", pType, Optional.class);
 
@@ -369,7 +369,7 @@ public class FJavaGenerator extends JavaGenerator {
         out.tab(1).javadoc("查询分页");
         out.tab(1).println("public <M> com.github.pagehelper.Page<M> fetchPage(SelectQuery<?> query, Map<String, Object> params, %s<M> clazz) {\n" +
                 "        int page = (int) %s.ofNullable(params.get(\"page\")).map(Object::toString).map(Integer::parseInt).orElse(1);\n" +
-                "        int limit = (int) Optional.ofNullable(params.get(\"limit\")).map(Object::toString).map(Integer::parseInt).orElse(10);\n" +
+                "        int limit = (int) Optional.ofNullable(java.util.Optional.ofNullable(params.get(\"limit\")).orElse(params.get(\"pageSize\"))).map(Object::toString).map(Integer::parseInt).orElse(10);\n" +
                 "        return fetchPage(query, page, limit, clazz);\n" +
                 "    }", Class.class, Optional.class);
 
