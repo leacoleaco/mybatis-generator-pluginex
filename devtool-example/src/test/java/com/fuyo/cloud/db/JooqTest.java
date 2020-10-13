@@ -4,10 +4,7 @@ import com.fuyo.cloud.db.biz.test.jooq.test.tables.TTest1;
 import com.fuyo.cloud.db.biz.test.jooq.test.tables.daos.TTest1Dao;
 import com.fuyo.cloud.db.biz.test.jooq.test.tables.records.TTest1Record;
 import com.github.pagehelper.Page;
-import org.jooq.DSLContext;
-import org.jooq.Result;
-import org.jooq.SelectQuery;
-import org.jooq.SortField;
+import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +13,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,16 +37,22 @@ public class JooqTest {
     @Test
     public void testN() {
         Map<String, Object> params = new HashMap<>();
-        params.put("wage_dateTime", "2020-09-01 00:00:00");
+//        params.put("wage_dateTime", "2020-09-01 00:00:00");
         params.put("oa_name", "3");
-        params.put("woeq_id", "1");
-        params.put("wolk_name", "21");
+//        params.put("woeq_id", "1");
+//        params.put("wolk_name", "21");
         params.put("od_id", "2");
+
+
         String s = dslContext.select(
-                DSL.count()
+                DSL.count(DSL.field("1", Integer.class)),
+                DSL.localDateTimeSub(T_TEST1.DATE_TIME, DSL.dayOfWeek(T_TEST1.DATE_TIME).minus(1), DatePart.DAY).cast(LocalDate.class)
         )
                 .from(T_TEST1)
                 .where(T_TEST1.buildCondition(params))
+                .groupBy(
+                        DSL.week(T_TEST1.DATE_TIME)
+                )
                 .toString();
 
         System.out.println(s);
