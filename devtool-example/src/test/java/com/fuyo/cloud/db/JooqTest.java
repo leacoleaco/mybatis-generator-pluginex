@@ -45,18 +45,48 @@ public class JooqTest {
         params.put("od_id", "2");
 
 
-        String s = dslContext.select(
-                DSLEx.count1(),
-                DSLEx.castToFirstDayOfWeek(T_TEST1.DATE_TIME)
-        )
-                .from(T_TEST1)
-                .where(T_TEST1.buildCondition(params))
-                .groupBy(
-                        DSL.week(T_TEST1.DATE_TIME)
+        System.out.println(
+                dslContext.select(
+                        DSLEx.count1(),
+                        DSLEx.castToFirstDayOfWeek(T_TEST1.DATE_TIME)
                 )
-                .toString();
+                        .from(T_TEST1)
+                        .where(T_TEST1.buildCondition(params))
+                        .groupBy(
+                                DSL.week(T_TEST1.DATE_TIME)
+                        )
+                        .toString()
+        );
 
-        System.out.println(s);
+
+        System.out.println("========================");
+
+        System.out.println(
+                dslContext.select(
+                        DSLEx.count1(),
+                        DSLEx.castToFirstDayOfMonth(T_TEST1.DATE_TIME)
+                )
+                        .from(T_TEST1)
+                        .where(T_TEST1.buildCondition(params))
+                        .groupBy(
+                                DSL.month(T_TEST1.DATE_TIME)
+                        )
+                        .toString()
+        );
+
+//        System.out.println("========================");
+//        System.out.println(
+//                dslContext.select(
+//                        DSLEx.count1(),
+//                        DSLEx.castToFirstDayOfWeek(T_TEST1.DATE_TIME)
+//                )
+//                        .from(T_TEST1)
+//                        .where(T_TEST1.buildCondition(params))
+//                        .groupBy(
+//                                DSL.week(T_TEST1.DATE_TIME)
+//                        )
+//                        .toString()
+//        );
 
     }
 
