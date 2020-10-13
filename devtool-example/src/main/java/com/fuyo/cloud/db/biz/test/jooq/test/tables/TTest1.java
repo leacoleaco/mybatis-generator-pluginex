@@ -19,7 +19,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.jooq.Condition;
-import org.jooq.Context;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
@@ -32,7 +31,6 @@ import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
-import org.jooq.impl.CustomCondition;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
@@ -43,7 +41,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TTest1 extends TableImpl<TTest1Record> {
 
-    private static final long serialVersionUID = 2030531626;
+    private static final long serialVersionUID = 816842707;
 
     /**
      * The reference instance of <code>test.t_test1</code>
@@ -56,13 +54,6 @@ public class TTest1 extends TableImpl<TTest1Record> {
     @Override
     public Class<TTest1Record> getRecordType() {
         return TTest1Record.class;
-    }
-
-    /**
-     * 从url参数中构建条件
-     */
-    public Condition buildWithUrlParam(java.util.Map<String, Object> params){
-        return null;
     }
 
     /**
@@ -121,21 +112,13 @@ public class TTest1 extends TableImpl<TTest1Record> {
             throw new IllegalArgumentException("opera code error,can not found operate:" + code);
         }
     }
-    private Condition emptyCondition() {
-        return new CustomCondition() {
-            @Override
-            public void accept(Context<?> ctx) {
-                ctx.sql("1 = 1");
-            }
-        };
-    }
 
     /**
      * 从url参数中构建条件
      */
-    public Condition buildWhere(Map<String, Object> params){
+    public Condition buildCondition(Map<String, Object> params){
         if (params == null || params.isEmpty()) {
-            return emptyCondition();
+            return DSL.trueCondition();
         }
         SQLFilter.filter(params);
         java.util.Iterator entries = params.entrySet().iterator();
@@ -198,7 +181,7 @@ public class TTest1 extends TableImpl<TTest1Record> {
                     return condition;
                 }
             case "lk":
-                if (value != null) {
+                if (value != null && !"".equals(value)) {
                     return opera.operate(condition, field.like("%" + value + "%"));
                 } else {
                     return condition;

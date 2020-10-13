@@ -1,5 +1,6 @@
 package com.fuyo.cloud.db;
 
+import com.fuyo.cloud.db.biz.test.jooq.test.tables.TTest1;
 import com.fuyo.cloud.db.biz.test.jooq.test.tables.daos.TTest1Dao;
 import com.fuyo.cloud.db.biz.test.jooq.test.tables.records.TTest1Record;
 import com.github.pagehelper.Page;
@@ -7,6 +8,7 @@ import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.jooq.SelectQuery;
 import org.jooq.SortField;
+import org.jooq.impl.DSL;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,6 +34,38 @@ public class JooqTest {
 
     @Resource
     TTest1Dao tTest1Dao;
+
+    @Test
+    public void testN() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("wage_dateTime", "2020-09-01 00:00:00");
+        params.put("oa_name", "3");
+        params.put("woeq_id", "1");
+        params.put("wolk_name", "21");
+        params.put("od_id", "2");
+        String s = dslContext.select(
+                DSL.count()
+        )
+                .from(T_TEST1)
+                .where(T_TEST1.buildCondition(params))
+                .toString();
+
+        System.out.println(s);
+
+    }
+
+    @Test
+    public void testN1() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("wage_dateTime", "2020-09-01 00:00:00");
+        params.put("oa_name", "3");
+        params.put("woeq_id", "1");
+        params.put("wolk_name", "21");
+        params.put("od_id", "2");
+        Page<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1> tTest1s = tTest1Dao.fetchPage(params);
+        System.out.println(tTest1s);
+
+    }
 
     @Test
     public void test2() {
@@ -76,7 +110,7 @@ public class JooqTest {
                         T_TEST1.DATE_TIME
                 )
                 .from(T_TEST1)
-                .where(T_TEST1.buildWhere(params))
+                .where(T_TEST1.buildCondition(params))
                 .and(T_TEST1.DATE_TIME.lt(LocalDateTime.now().plusDays(-3)))
                 .orderBy(T_TEST1.buildOrderBy(params, T_TEST1.NAME.asc()))
                 .limit(2, 3)
@@ -87,28 +121,6 @@ public class JooqTest {
         System.out.println(s);
     }
 
-    @Test
-    public void test3() {
-        Map<String, Object> params = new HashMap<>();
-        params.put("wage_dateTime", "2020-09-01 00:00:00");
-        params.put("oa_name", "3");
-        params.put("waeq_id", "1");
-        params.put("walk_name", "21");
-        params.put("od_id", "2");
-
-
-        Page<com.fuyo.cloud.db.biz.test.jooq.test.tables.pojos.TTest1> paget =
-                tTest1Dao.fetchPage(dslContext
-                                .select(T_TEST1.ID,
-                                        T_TEST1.NAME,
-                                        T_TEST1.DATE_TIME
-                                )
-                                .from(T_TEST1)
-                                .where(T_TEST1.DATE_TIME.lt(LocalDateTime.now().plusDays(-3)))
-                                .orderBy(T_TEST1.buildOrderBy(params, T_TEST1.NAME.asc())),
-                        1, 2);
-        System.out.println(paget);
-    }
 
     @Test
     public void testRecord() {
