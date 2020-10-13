@@ -74,19 +74,36 @@ public class JooqTest {
                         .toString()
         );
 
-//        System.out.println("========================");
-//        System.out.println(
-//                dslContext.select(
-//                        DSLEx.count1(),
-//                        DSLEx.castToFirstDayOfWeek(T_TEST1.DATE_TIME)
-//                )
-//                        .from(T_TEST1)
-//                        .where(T_TEST1.buildCondition(params))
-//                        .groupBy(
-//                                DSL.week(T_TEST1.DATE_TIME)
-//                        )
-//                        .toString()
-//        );
+        System.out.println("========================");
+
+        System.out.println(
+                dslContext.select(
+                        DSLEx.count1(),
+                        DSLEx.firstDayOfQuarter(T_TEST1.DATE_TIME)
+                )
+                        .from(T_TEST1)
+                        .where(T_TEST1.buildCondition(params))
+                        .groupBy(
+                                DSL.quarter(T_TEST1.DATE_TIME)
+                        )
+                        .toString()
+        );
+
+        System.out.println("========================");
+
+        System.out.println(
+                dslContext.select(
+                        DSLEx.count1(),
+                        DSLEx.castToFirstDayOfYear(T_TEST1.DATE_TIME)
+                )
+                        .from(T_TEST1)
+                        .where(T_TEST1.buildCondition(params))
+                        .groupBy(
+                                DSL.year(T_TEST1.DATE_TIME)
+                        )
+                        .toString()
+        );
+
 
     }
 
