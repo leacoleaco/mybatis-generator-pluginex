@@ -1,5 +1,6 @@
 package com.fuyo.cloud.db;
 
+import com.fuyo.cloud.db.biz.jooq.util.DSLEx;
 import com.fuyo.cloud.db.biz.test.jooq.test.tables.TTest1;
 import com.fuyo.cloud.db.biz.test.jooq.test.tables.daos.TTest1Dao;
 import com.fuyo.cloud.db.biz.test.jooq.test.tables.records.TTest1Record;
@@ -45,8 +46,8 @@ public class JooqTest {
 
 
         String s = dslContext.select(
-                DSL.count(DSL.field("1", Integer.class)),
-                DSL.localDateTimeSub(T_TEST1.DATE_TIME, DSL.dayOfWeek(T_TEST1.DATE_TIME).minus(1), DatePart.DAY).cast(LocalDate.class)
+                DSLEx.count1(),
+                DSLEx.castToFirstDayOfWeek(T_TEST1.DATE_TIME)
         )
                 .from(T_TEST1)
                 .where(T_TEST1.buildCondition(params))
