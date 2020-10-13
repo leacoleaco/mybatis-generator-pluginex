@@ -376,10 +376,15 @@ public class FJavaGenerator extends JavaGenerator {
                            "        int total = ctx().fetchCount(query);\n" +
                            "        page.setTotal(total);\n" +
                            "        query.addLimit(page.getStartRow(), page.getPageSize());\n" +
-                           "        List<M> list = ctx().fetch(query).into(clazz);\n" +
+                           "        List<M> list = fetchList(query, clazz);\n" +
                            "        page.clear();\n" +
                            "        page.addAll(list);\n" +
                            "        return page;\n" +
                            "    }", Class.class);
+
+        out.tab(1).javadoc("查询列表");
+        out.tab(1).println("public <M> List<M> fetchList(SelectQuery<?> query, %s<M> clazz) {\n" +
+                "        return ctx().fetch(query).into(clazz);\n" +
+                "    }", Class.class);
     }
 }
