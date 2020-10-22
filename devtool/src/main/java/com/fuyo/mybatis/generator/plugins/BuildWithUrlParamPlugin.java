@@ -289,7 +289,9 @@ public class BuildWithUrlParamPlugin extends BasePlugin {
                         "                })\n" +
                         "                .filter(java.util.Objects::nonNull)\n" +
                         "                .toArray(java.lang.String[]::new);\n" +
-                        "        this.orderBy(orderByCause);"
+                        "        if (orderByCause.length > 0) {\n" +
+                        "            this.orderBy(orderByCause);\n" +
+                        "        }"
         );
     }
 
