@@ -138,8 +138,12 @@ public class FJavaGenerator extends JavaGenerator {
                 "                condition = solveCondition(condition, expression, value);\n" +
                 "            }\n" +
                 "        }\n" +
-                "        return condition;\n" +
-                "    }\n", Map.class, Map.class, Pattern.class
+                "        if(condition==null){\n" +
+                "            return %s.trueCondition();\n" +
+                "        } else {\n" +
+                "            return condition;\n" +
+                "        }\n" +
+                "    }\n", Map.class, Map.class, Pattern.class, DSL.class
         );
 
 
