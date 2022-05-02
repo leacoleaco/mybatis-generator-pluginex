@@ -22,8 +22,9 @@ import java.lang.reflect.Method;
 
 /**
  * ---------------------------------------------------------------------------
- *
+ * <p>
  * ---------------------------------------------------------------------------
+ *
  * @author: hewei
  * @time:2018/5/3 18:39
  * ---------------------------------------------------------------------------
@@ -31,6 +32,7 @@ import java.lang.reflect.Method;
 public class BeanUtils {
     /**
      * 设置属性
+     *
      * @param bean
      * @param name
      * @param value
@@ -45,6 +47,7 @@ public class BeanUtils {
 
     /**
      * 获取属性
+     *
      * @param bean
      * @param name
      * @return
@@ -57,6 +60,7 @@ public class BeanUtils {
 
     /**
      * 执行无参方法
+     *
      * @param bean
      * @param clazz
      * @param name

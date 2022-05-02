@@ -16,10 +16,6 @@
 
 package pro.leaco.mybatis.generator.plugins.utils;
 
-import pro.leaco.mybatis.generator.plugins.CommentPlugin;
-import pro.leaco.mybatis.generator.plugins.utils.enhanced.TemplateCommentGenerator;
-import pro.leaco.mybatis.generator.plugins.utils.hook.HookAggregator;
-import pro.leaco.mybatis.generator.plugins.utils.hook.ITableConfigurationHook;
 import org.mybatis.generator.api.CommentGenerator;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
@@ -28,6 +24,10 @@ import org.mybatis.generator.config.PluginConfiguration;
 import org.mybatis.generator.internal.util.StringUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pro.leaco.mybatis.generator.plugins.CommentPlugin;
+import pro.leaco.mybatis.generator.plugins.utils.enhanced.TemplateCommentGenerator;
+import pro.leaco.mybatis.generator.plugins.utils.hook.HookAggregator;
+import pro.leaco.mybatis.generator.plugins.utils.hook.ITableConfigurationHook;
 
 import java.util.List;
 
@@ -35,6 +35,7 @@ import java.util.List;
  * ---------------------------------------------------------------------------
  * 基础plugin
  * ---------------------------------------------------------------------------
+ *
  * @author: hewei
  * @time:2017/4/28 13:57
  * ---------------------------------------------------------------------------
@@ -52,6 +53,7 @@ public class BasePlugin extends PluginAdapter {
 
     /**
      * Set the context under which this plugin is running.
+     *
      * @param context the new context
      */
     @Override
@@ -106,6 +108,7 @@ public class BasePlugin extends PluginAdapter {
 
     /**
      * {@inheritDoc}
+     *
      * @param introspectedTable
      */
     @Override

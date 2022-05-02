@@ -1,13 +1,13 @@
 package pro.leaco.mybatis.generator.plugins;
 
-import pro.leaco.mybatis.generator.plugins.utils.BasePlugin;
-import pro.leaco.mybatis.generator.plugins.utils.FormatTools;
-import pro.leaco.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
-import pro.leaco.mybatis.generator.plugins.utils.PluginTools;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
+import pro.leaco.mybatis.generator.plugins.utils.BasePlugin;
+import pro.leaco.mybatis.generator.plugins.utils.FormatTools;
+import pro.leaco.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
+import pro.leaco.mybatis.generator.plugins.utils.PluginTools;
 
 import java.util.List;
 

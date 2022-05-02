@@ -22,8 +22,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * ---------------------------------------------------------------------------
- *
+ * <p>
  * ---------------------------------------------------------------------------
+ *
  * @author: hewei
  * @time:2017/8/2 16:55
  * ---------------------------------------------------------------------------
@@ -31,14 +32,16 @@ import org.slf4j.LoggerFactory;
 public class InnerTypeFullyQualifiedJavaType extends FullyQualifiedJavaType {
     private final static Logger logger = LoggerFactory.getLogger(InnerTypeFullyQualifiedJavaType.class);
     private String outerType;   // 内部类
+
     /**
      * Use this constructor to construct a generic type with the specified type parameters.
+     *
      * @param fullTypeSpecification the full type specification
      */
-    public InnerTypeFullyQualifiedJavaType(String fullTypeSpecification){
+    public InnerTypeFullyQualifiedJavaType(String fullTypeSpecification) {
         super(fullTypeSpecification);
 
-        try{
+        try {
             // 修正package
             java.lang.reflect.Field packageName = this.getClass().getSuperclass().getDeclaredField("packageName");
             packageName.setAccessible(true);
@@ -46,7 +49,7 @@ public class InnerTypeFullyQualifiedJavaType extends FullyQualifiedJavaType {
             packageName.set(this, oldPackageName.substring(0, oldPackageName.lastIndexOf(".")));
 
             outerType = oldPackageName.substring(oldPackageName.lastIndexOf(".") + 1);
-        } catch (Exception e){
+        } catch (Exception e) {
             logger.error("InnerTypeFullyQualifiedJavaType 赋值失败！", e);
         }
     }

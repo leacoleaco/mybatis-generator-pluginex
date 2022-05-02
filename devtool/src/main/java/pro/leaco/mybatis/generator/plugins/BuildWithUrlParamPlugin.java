@@ -1,10 +1,10 @@
 package pro.leaco.mybatis.generator.plugins;
 
+import org.mybatis.generator.api.IntrospectedTable;
+import org.mybatis.generator.api.dom.java.*;
 import pro.leaco.mybatis.generator.plugins.utils.BasePlugin;
 import pro.leaco.mybatis.generator.plugins.utils.FormatTools;
 import pro.leaco.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
-import org.mybatis.generator.api.IntrospectedTable;
-import org.mybatis.generator.api.dom.java.*;
 
 /**
  * 使用url参数进行构建

@@ -16,10 +16,6 @@
 
 package pro.leaco.mybatis.generator.plugins;
 
-import pro.leaco.mybatis.generator.plugins.utils.BasePlugin;
-import pro.leaco.mybatis.generator.plugins.utils.EnumModelType;
-import pro.leaco.mybatis.generator.plugins.utils.PluginTools;
-import pro.leaco.mybatis.generator.plugins.utils.hook.ILombokPluginHook;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.Method;
@@ -27,6 +23,10 @@ import org.mybatis.generator.api.dom.java.TopLevelClass;
 import org.mybatis.generator.config.PluginConfiguration;
 import org.mybatis.generator.internal.ObjectFactory;
 import org.mybatis.generator.internal.util.StringUtility;
+import pro.leaco.mybatis.generator.plugins.utils.BasePlugin;
+import pro.leaco.mybatis.generator.plugins.utils.EnumModelType;
+import pro.leaco.mybatis.generator.plugins.utils.PluginTools;
+import pro.leaco.mybatis.generator.plugins.utils.hook.ILombokPluginHook;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,6 +39,7 @@ import java.util.regex.Pattern;
  * ---------------------------------------------------------------------------
  * LombokPlugin
  * ---------------------------------------------------------------------------
+ *
  * @author: hewei
  * @time:2018/10/29 14:33
  * ---------------------------------------------------------------------------
@@ -68,6 +69,7 @@ public class LombokPlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param warnings
      * @return
      */
@@ -87,6 +89,7 @@ public class LombokPlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param introspectedTable
      * @return
      */
@@ -118,6 +121,7 @@ public class LombokPlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -130,6 +134,7 @@ public class LombokPlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -142,6 +147,7 @@ public class LombokPlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -154,6 +160,7 @@ public class LombokPlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param method
      * @param topLevelClass
      * @param introspectedColumn
@@ -173,6 +180,7 @@ public class LombokPlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param method
      * @param topLevelClass
      * @param introspectedColumn
@@ -192,6 +200,7 @@ public class LombokPlugin extends BasePlugin {
 
     /**
      * 添加注解
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @param modelType
@@ -267,6 +276,7 @@ public class LombokPlugin extends BasePlugin {
 
     /**
      * 添加注解
+     *
      * @param topLevelClass
      * @param annotation
      */

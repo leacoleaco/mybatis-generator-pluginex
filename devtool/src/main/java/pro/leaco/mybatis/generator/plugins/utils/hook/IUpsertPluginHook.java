@@ -26,8 +26,9 @@ import java.util.List;
 
 /**
  * ---------------------------------------------------------------------------
- *
+ * <p>
  * ---------------------------------------------------------------------------
+ *
  * @author: hewei
  * @time:2018/4/27 11:09
  * ---------------------------------------------------------------------------
@@ -35,6 +36,7 @@ import java.util.List;
 public interface IUpsertPluginHook {
     /**
      * upsertSelective 方法
+     *
      * @param method
      * @param interfaze
      * @param introspectedTable
@@ -44,6 +46,7 @@ public interface IUpsertPluginHook {
 
     /**
      * upsertByExampleSelective 方法
+     *
      * @param method
      * @param interfaze
      * @param introspectedTable
@@ -53,6 +56,7 @@ public interface IUpsertPluginHook {
 
     /**
      * upsertSelective xml
+     *
      * @param element
      * @param columns
      * @param insertColumnsEle
@@ -65,6 +69,7 @@ public interface IUpsertPluginHook {
 
     /**
      * upsertByExampleSelective xml
+     *
      * @param element
      * @param columns
      * @param insertColumnsEle

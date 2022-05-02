@@ -16,7 +16,6 @@
 
 package pro.leaco.mybatis.generator.plugins.utils;
 
-import pro.leaco.mybatis.generator.plugins.ModelColumnPlugin;
 import org.mybatis.generator.api.CommentGenerator;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
@@ -24,6 +23,7 @@ import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.VisitableElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
+import pro.leaco.mybatis.generator.plugins.ModelColumnPlugin;
 
 import java.util.Iterator;
 import java.util.List;
@@ -34,6 +34,7 @@ import java.util.TreeSet;
  * ---------------------------------------------------------------------------
  * 格式化工具，优化输出
  * ---------------------------------------------------------------------------
+ *
  * @author: hewei
  * @time:2017/6/30 10:53
  * ---------------------------------------------------------------------------
@@ -41,6 +42,7 @@ import java.util.TreeSet;
 public class FormatTools {
     /**
      * 在最佳位置添加方法
+     *
      * @param innerClass
      * @param method
      */
@@ -50,6 +52,7 @@ public class FormatTools {
 
     /**
      * 在最佳位置添加方法
+     *
      * @param interfacz
      * @param method
      */
@@ -84,6 +87,7 @@ public class FormatTools {
 
     /**
      * 在最佳位置添加方法
+     *
      * @param innerEnum
      * @param method
      */
@@ -93,6 +97,7 @@ public class FormatTools {
 
     /**
      * 在最佳位置添加方法
+     *
      * @param topLevelClass
      * @param method
      */
@@ -102,6 +107,7 @@ public class FormatTools {
 
     /**
      * 在最佳位置添加节点
+     *
      * @param rootElement
      * @param element
      */
@@ -151,6 +157,7 @@ public class FormatTools {
 
     /**
      * 找出节点ID值
+     *
      * @param element
      * @return
      */
@@ -165,6 +172,7 @@ public class FormatTools {
 
     /**
      * 获取最佳添加位置
+     *
      * @param method
      * @param methods
      * @return
@@ -196,6 +204,7 @@ public class FormatTools {
 
     /**
      * 替换已有方法注释
+     *
      * @param commentGenerator
      * @param method
      * @param introspectedTable
@@ -207,6 +216,7 @@ public class FormatTools {
 
     /**
      * 替换已有注释
+     *
      * @param commentGenerator
      * @param element
      */
@@ -238,6 +248,7 @@ public class FormatTools {
 
     /**
      * 首字母大写
+     *
      * @param str
      * @return
      */

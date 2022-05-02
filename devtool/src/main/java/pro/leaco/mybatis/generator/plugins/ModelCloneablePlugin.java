@@ -16,18 +16,19 @@
 
 package pro.leaco.mybatis.generator.plugins;
 
-import pro.leaco.mybatis.generator.plugins.utils.BasePlugin;
-import pro.leaco.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.JavaVisibility;
 import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
+import pro.leaco.mybatis.generator.plugins.utils.BasePlugin;
+import pro.leaco.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
 
 /**
  * ---------------------------------------------------------------------------
  * Cloneable
  * ---------------------------------------------------------------------------
+ *
  * @author: hewei
  * @time:2018/11/7 15:26
  * ---------------------------------------------------------------------------
@@ -35,6 +36,7 @@ import org.mybatis.generator.api.dom.java.TopLevelClass;
 public class ModelCloneablePlugin extends BasePlugin {
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -47,6 +49,7 @@ public class ModelCloneablePlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -59,6 +62,7 @@ public class ModelCloneablePlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -71,6 +75,7 @@ public class ModelCloneablePlugin extends BasePlugin {
 
     /**
      * 支持Cloneable
+     *
      * @param topLevelClass
      * @param introspectedTable
      */

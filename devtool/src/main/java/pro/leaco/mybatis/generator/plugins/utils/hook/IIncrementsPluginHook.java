@@ -24,8 +24,9 @@ import java.util.List;
 
 /**
  * ---------------------------------------------------------------------------
- *
+ * <p>
  * ---------------------------------------------------------------------------
+ *
  * @author: hewei
  * @time:2018/4/28 17:50
  * ---------------------------------------------------------------------------
@@ -33,6 +34,7 @@ import java.util.List;
 public interface IIncrementsPluginHook {
     /**
      * 生成增量操作节点
+     *
      * @param introspectedColumn
      * @param prefix
      * @param hasComma
@@ -42,6 +44,7 @@ public interface IIncrementsPluginHook {
 
     /**
      * 生成增量操作节点(SelectiveEnhancedPlugin)
+     *
      * @param columns
      * @return
      */
@@ -49,6 +52,7 @@ public interface IIncrementsPluginHook {
 
     /**
      * 是否支持increment
+     *
      * @param column
      * @return
      */

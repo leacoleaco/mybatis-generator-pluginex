@@ -16,9 +16,6 @@
 
 package pro.leaco.mybatis.generator.plugins;
 
-import pro.leaco.mybatis.generator.plugins.utils.BasePlugin;
-import pro.leaco.mybatis.generator.plugins.utils.BeanUtils;
-import pro.leaco.mybatis.generator.plugins.utils.hook.ITableConfigurationHook;
 import org.mybatis.generator.api.FullyQualifiedTable;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -27,6 +24,9 @@ import org.mybatis.generator.config.DomainObjectRenamingRule;
 import org.mybatis.generator.config.PropertyRegistry;
 import org.mybatis.generator.config.TableConfiguration;
 import org.mybatis.generator.internal.util.StringUtility;
+import pro.leaco.mybatis.generator.plugins.utils.BasePlugin;
+import pro.leaco.mybatis.generator.plugins.utils.BeanUtils;
+import pro.leaco.mybatis.generator.plugins.utils.hook.ITableConfigurationHook;
 
 import java.util.List;
 import java.util.Properties;
@@ -40,8 +40,9 @@ import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
 
 /**
  * ---------------------------------------------------------------------------
- *
+ * <p>
  * ---------------------------------------------------------------------------
+ *
  * @author: hewei
  * @time:2018/5/21 11:23
  * ---------------------------------------------------------------------------
@@ -72,6 +73,7 @@ public class TableRenameConfigurationPlugin extends BasePlugin implements ITable
 
     /**
      * {@inheritDoc}
+     *
      * @param warnings
      * @return
      */
@@ -93,6 +95,7 @@ public class TableRenameConfigurationPlugin extends BasePlugin implements ITable
 
     /**
      * 表配置
+     *
      * @param introspectedTable
      */
     @Override
@@ -213,6 +216,7 @@ public class TableRenameConfigurationPlugin extends BasePlugin implements ITable
 
     /**
      * column rename
+     *
      * @param columns
      * @param rule
      * @param tc

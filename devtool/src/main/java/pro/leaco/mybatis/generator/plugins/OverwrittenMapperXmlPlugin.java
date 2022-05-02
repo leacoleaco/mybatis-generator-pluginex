@@ -1,12 +1,12 @@
 package pro.leaco.mybatis.generator.plugins;
 
-import java.io.File;
-
-import pro.leaco.mybatis.generator.plugins.utils.BasePlugin;
 import org.mybatis.generator.api.GeneratedXmlFile;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pro.leaco.mybatis.generator.plugins.utils.BasePlugin;
+
+import java.io.File;
 
 public class OverwrittenMapperXmlPlugin extends BasePlugin {
     private static final Logger log = LoggerFactory.getLogger(OverwrittenMapperXmlPlugin.class);

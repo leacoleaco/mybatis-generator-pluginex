@@ -26,8 +26,9 @@ import java.util.List;
 
 /**
  * ---------------------------------------------------------------------------
- *
+ * <p>
  * ---------------------------------------------------------------------------
+ *
  * @author: hewei
  * @time:2018/4/28 17:29
  * ---------------------------------------------------------------------------
@@ -35,6 +36,7 @@ import java.util.List;
 public interface IModelBuilderPluginHook {
     /**
      * Model builder class 生成
+     *
      * @param topLevelClass
      * @param builderClass
      * @param columns
@@ -45,6 +47,7 @@ public interface IModelBuilderPluginHook {
 
     /**
      * Model builder set 方法生成
+     *
      * @param method
      * @param topLevelClass
      * @param builderClass

@@ -16,7 +16,6 @@
 
 package pro.leaco.mybatis.generator.plugins.utils;
 
-import pro.leaco.mybatis.generator.plugins.ExampleTargetPlugin;
 import org.mybatis.generator.api.FullyQualifiedTable;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -24,6 +23,7 @@ import org.mybatis.generator.config.Context;
 import org.mybatis.generator.config.JavaModelGeneratorConfiguration;
 import org.mybatis.generator.config.PluginConfiguration;
 import org.mybatis.generator.internal.util.StringUtility;
+import pro.leaco.mybatis.generator.plugins.ExampleTargetPlugin;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -35,6 +35,7 @@ import java.util.Optional;
  * ---------------------------------------------------------------------------
  * IntrospectedTable 的一些拓展增强
  * ---------------------------------------------------------------------------
+ *
  * @author: hewei
  * @time:2017/6/13 13:48
  * ---------------------------------------------------------------------------
@@ -43,6 +44,7 @@ public class IntrospectedTableTools {
 
     /**
      * 设置DomainObjectName和MapperName
+     *
      * @param introspectedTable
      * @param context
      * @param domainObjectName
@@ -84,6 +86,7 @@ public class IntrospectedTableTools {
 
     /**
      * 安全获取column 通过正则获取的name可能包含beginningDelimiter&&endingDelimiter
+     *
      * @param introspectedTable
      * @param columnName
      * @return
@@ -106,6 +109,7 @@ public class IntrospectedTableTools {
 
     /**
      * 获取生成model baseRecord的列
+     *
      * @param introspectedTable
      * @return
      */
@@ -131,6 +135,7 @@ public class IntrospectedTableTools {
 
     /**
      * 是否有primaryKey 列
+     *
      * @param introspectedTable
      * @return
      */
@@ -141,6 +146,7 @@ public class IntrospectedTableTools {
 
     /**
      * 是否有 blob 列
+     *
      * @param introspectedTable
      * @return
      */

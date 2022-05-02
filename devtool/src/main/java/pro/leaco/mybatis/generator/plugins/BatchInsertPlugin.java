@@ -16,7 +16,6 @@
 
 package pro.leaco.mybatis.generator.plugins;
 
-import com.fuyo.mybatis.generator.plugins.utils.*;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
@@ -34,6 +33,7 @@ import java.util.Properties;
  * ---------------------------------------------------------------------------
  * 批量插入插件
  * ---------------------------------------------------------------------------
+ *
  * @author: hewei
  * @time:2017/1/13 9:33
  * ---------------------------------------------------------------------------
@@ -81,6 +81,7 @@ public class BatchInsertPlugin extends BasePlugin {
     /**
      * Java Client Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param interfaze
      * @param introspectedTable
      * @return
@@ -122,6 +123,7 @@ public class BatchInsertPlugin extends BasePlugin {
     /**
      * SQL Map Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param document
      * @param introspectedTable
      * @return
@@ -220,6 +222,7 @@ public class BatchInsertPlugin extends BasePlugin {
 
     /**
      * 生成insert selective 增强的插入语句
+     *
      * @param introspectedTable
      * @return
      */

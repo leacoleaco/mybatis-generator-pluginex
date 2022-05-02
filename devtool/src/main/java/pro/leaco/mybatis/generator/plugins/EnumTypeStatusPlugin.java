@@ -16,11 +16,6 @@
 
 package pro.leaco.mybatis.generator.plugins;
 
-import pro.leaco.mybatis.generator.plugins.utils.BasePlugin;
-import pro.leaco.mybatis.generator.plugins.utils.FormatTools;
-import pro.leaco.mybatis.generator.plugins.utils.IntrospectedTableTools;
-import pro.leaco.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
-import pro.leaco.mybatis.generator.plugins.utils.hook.ILogicalDeletePluginHook;
 import org.mybatis.generator.api.CommentGenerator;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -28,6 +23,11 @@ import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.api.dom.xml.Document;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.internal.util.StringUtility;
+import pro.leaco.mybatis.generator.plugins.utils.BasePlugin;
+import pro.leaco.mybatis.generator.plugins.utils.FormatTools;
+import pro.leaco.mybatis.generator.plugins.utils.IntrospectedTableTools;
+import pro.leaco.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
+import pro.leaco.mybatis.generator.plugins.utils.hook.ILogicalDeletePluginHook;
 
 import java.math.BigDecimal;
 import java.util.*;

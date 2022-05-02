@@ -18,10 +18,10 @@
 
 package pro.leaco.mybatis.generator.plugins;
 
-import pro.leaco.mybatis.generator.plugins.utils.BasePlugin;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.config.Context;
 import org.mybatis.generator.config.JavaModelGeneratorConfiguration;
+import pro.leaco.mybatis.generator.plugins.utils.BasePlugin;
 
 import java.util.List;
 import java.util.Properties;
@@ -30,6 +30,7 @@ import java.util.Properties;
  * ---------------------------------------------------------------------------
  * Example类生成位置修改
  * ---------------------------------------------------------------------------
+ *
  * @author: hewei
  * @time:2017/1/12 12:36
  * ---------------------------------------------------------------------------
@@ -46,7 +47,7 @@ public class ExampleTargetPlugin extends BasePlugin {
         // 获取配置的目标package
         Properties properties = getProperties();
         this.targetPackage = properties.getProperty(PRO_TARGET_PACKAGE);
-        if (this.targetPackage == null){
+        if (this.targetPackage == null) {
             warnings.add("请配置com.fuyo.mybatis.generator.plugins.ExampleTargetPlugin插件的目标包名(targetPackage)！");
             return false;
         }
@@ -71,7 +72,7 @@ public class ExampleTargetPlugin extends BasePlugin {
 
         introspectedTable.setExampleType(newExampleType);
 
-        logger.debug("itfsw(Example 目标包修改插件):修改"+introspectedTable.getExampleType()+"的包到"+this.targetPackage);
+        logger.debug("itfsw(Example 目标包修改插件):修改" + introspectedTable.getExampleType() + "的包到" + this.targetPackage);
     }
 
 }

@@ -16,9 +16,6 @@
 
 package pro.leaco.mybatis.generator.plugins;
 
-import com.fuyo.mybatis.generator.plugins.utils.*;
-import pro.leaco.mybatis.generator.plugins.utils.hook.ISelectOneByExamplePluginHook;
-import pro.leaco.mybatis.generator.plugins.utils.hook.ISelectSelectivePluginHook;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
@@ -30,6 +27,8 @@ import org.mybatis.generator.api.dom.xml.Document;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import pro.leaco.mybatis.generator.plugins.utils.*;
+import pro.leaco.mybatis.generator.plugins.utils.hook.ISelectOneByExamplePluginHook;
+import pro.leaco.mybatis.generator.plugins.utils.hook.ISelectSelectivePluginHook;
 
 import java.util.List;
 

@@ -16,7 +16,6 @@
 
 package pro.leaco.mybatis.generator.plugins.utils.hook;
 
-import pro.leaco.mybatis.generator.plugins.utils.BasePlugin;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.Plugin;
@@ -27,14 +26,16 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.config.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pro.leaco.mybatis.generator.plugins.utils.BasePlugin;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * ---------------------------------------------------------------------------
- *
+ * <p>
  * ---------------------------------------------------------------------------
+ *
  * @author: hewei
  * @time:2018/4/27 11:33
  * ---------------------------------------------------------------------------
@@ -63,6 +64,7 @@ public class HookAggregator implements IUpsertPluginHook,
 
     /**
      * Getter method for property <tt>instance</tt>.
+     *
      * @return property value of instance
      * @author hewei
      */
@@ -72,6 +74,7 @@ public class HookAggregator implements IUpsertPluginHook,
 
     /**
      * Setter method for property <tt>context</tt>.
+     *
      * @param context value to be assigned to property context
      * @author hewei
      */
@@ -81,6 +84,7 @@ public class HookAggregator implements IUpsertPluginHook,
 
     /**
      * 获取插件
+     *
      * @param clazz
      * @param <T>
      * @return

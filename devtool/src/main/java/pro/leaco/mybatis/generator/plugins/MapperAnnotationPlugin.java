@@ -16,18 +16,19 @@
 
 package pro.leaco.mybatis.generator.plugins;
 
-import pro.leaco.mybatis.generator.plugins.utils.BasePlugin;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.internal.util.StringUtility;
+import pro.leaco.mybatis.generator.plugins.utils.BasePlugin;
 
 import java.util.*;
 
 /**
  * ---------------------------------------------------------------------------
- *
+ * <p>
  * ---------------------------------------------------------------------------
+ *
  * @author: hewei
  * @time:2019/7/9 14:30
  * ---------------------------------------------------------------------------
@@ -45,6 +46,7 @@ public class MapperAnnotationPlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param introspectedTable
      * @return
      */
@@ -73,6 +75,7 @@ public class MapperAnnotationPlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param interfaze
      * @param topLevelClass
      * @param introspectedTable

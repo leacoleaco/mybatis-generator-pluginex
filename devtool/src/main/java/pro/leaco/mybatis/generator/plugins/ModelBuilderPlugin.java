@@ -16,6 +16,10 @@
 
 package pro.leaco.mybatis.generator.plugins;
 
+import org.mybatis.generator.api.IntrospectedColumn;
+import org.mybatis.generator.api.IntrospectedTable;
+import org.mybatis.generator.api.dom.java.*;
+import org.mybatis.generator.internal.util.JavaBeansUtil;
 import pro.leaco.mybatis.generator.plugins.utils.BasePlugin;
 import pro.leaco.mybatis.generator.plugins.utils.FormatTools;
 import pro.leaco.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
@@ -23,10 +27,6 @@ import pro.leaco.mybatis.generator.plugins.utils.PluginTools;
 import pro.leaco.mybatis.generator.plugins.utils.enhanced.InnerTypeFullyQualifiedJavaType;
 import pro.leaco.mybatis.generator.plugins.utils.hook.ILombokPluginHook;
 import pro.leaco.mybatis.generator.plugins.utils.hook.IModelBuilderPluginHook;
-import org.mybatis.generator.api.IntrospectedColumn;
-import org.mybatis.generator.api.IntrospectedTable;
-import org.mybatis.generator.api.dom.java.*;
-import org.mybatis.generator.internal.util.JavaBeansUtil;
 
 import java.util.List;
 
@@ -34,6 +34,7 @@ import java.util.List;
  * ---------------------------------------------------------------------------
  * 增加Model Builder方法
  * ---------------------------------------------------------------------------
+ *
  * @author: hewei
  * @time:2016/12/28 14:56
  * ---------------------------------------------------------------------------
@@ -44,6 +45,7 @@ public class ModelBuilderPlugin extends BasePlugin implements ILombokPluginHook 
     /**
      * Model Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -60,6 +62,7 @@ public class ModelBuilderPlugin extends BasePlugin implements ILombokPluginHook 
     /**
      * Model Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -73,6 +76,7 @@ public class ModelBuilderPlugin extends BasePlugin implements ILombokPluginHook 
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -111,6 +115,7 @@ public class ModelBuilderPlugin extends BasePlugin implements ILombokPluginHook 
 
     /**
      * 生成ModelBuilder
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @param columns

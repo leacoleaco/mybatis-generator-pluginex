@@ -1,17 +1,17 @@
 /**
- *    Copyright 2006-2018 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Copyright 2006-2018 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package pro.leaco.mybatis.generator.plugins.comment;
 
@@ -46,7 +46,9 @@ public class DefaultCommentGenerator implements CommentGenerator {
 
     protected boolean suppressAllComments;
 
-    /** If suppressAllComments is true, this option is ignored. */
+    /**
+     * If suppressAllComments is true, this option is ignored.
+     */
     protected boolean addRemarkComments;
 
     protected SimpleDateFormat dateFormat;
@@ -67,8 +69,7 @@ public class DefaultCommentGenerator implements CommentGenerator {
     /**
      * Adds a suitable comment to warn users that the element was generated, and when it was generated.
      *
-     * @param xmlElement
-     *            the xml element
+     * @param xmlElement the xml element
      */
     @Override
     public void addComment(XmlElement xmlElement) {
@@ -126,13 +127,11 @@ public class DefaultCommentGenerator implements CommentGenerator {
      * This method adds the custom javadoc tag for. You may do nothing if you do not wish to include the Javadoc tag -
      * however, if you do not include the Javadoc tag then the Java merge capability of the eclipse plugin will break.
      *
-     * @param javaElement
-     *            the java element
-     * @param markAsDoNotDelete
-     *            the mark as do not delete
+     * @param javaElement       the java element
+     * @param markAsDoNotDelete the mark as do not delete
      */
     protected void addJavadocTag(JavaElement javaElement,
-            boolean markAsDoNotDelete) {
+                                 boolean markAsDoNotDelete) {
         javaElement.addJavaDocLine(" *"); //$NON-NLS-1$
         StringBuilder sb = new StringBuilder();
         sb.append(" * "); //$NON-NLS-1$
@@ -167,7 +166,7 @@ public class DefaultCommentGenerator implements CommentGenerator {
 
     @Override
     public void addClassComment(InnerClass innerClass,
-            IntrospectedTable introspectedTable) {
+                                IntrospectedTable introspectedTable) {
         if (suppressAllComments) {
             return;
         }
@@ -189,7 +188,7 @@ public class DefaultCommentGenerator implements CommentGenerator {
 
     @Override
     public void addClassComment(InnerClass innerClass,
-            IntrospectedTable introspectedTable, boolean markAsDoNotDelete) {
+                                IntrospectedTable introspectedTable, boolean markAsDoNotDelete) {
         if (suppressAllComments) {
             return;
         }
@@ -211,8 +210,8 @@ public class DefaultCommentGenerator implements CommentGenerator {
 
     @Override
     public void addModelClassComment(TopLevelClass topLevelClass,
-            IntrospectedTable introspectedTable) {
-        if (suppressAllComments  || !addRemarkComments) {
+                                     IntrospectedTable introspectedTable) {
+        if (suppressAllComments || !addRemarkComments) {
             return;
         }
 
@@ -241,7 +240,7 @@ public class DefaultCommentGenerator implements CommentGenerator {
 
     @Override
     public void addEnumComment(InnerEnum innerEnum,
-            IntrospectedTable introspectedTable) {
+                               IntrospectedTable introspectedTable) {
         if (suppressAllComments) {
             return;
         }
@@ -263,8 +262,8 @@ public class DefaultCommentGenerator implements CommentGenerator {
 
     @Override
     public void addFieldComment(Field field,
-            IntrospectedTable introspectedTable,
-            IntrospectedColumn introspectedColumn) {
+                                IntrospectedTable introspectedTable,
+                                IntrospectedColumn introspectedColumn) {
         if (suppressAllComments) {
             return;
         }
@@ -319,7 +318,7 @@ public class DefaultCommentGenerator implements CommentGenerator {
 
     @Override
     public void addGeneralMethodComment(Method method,
-            IntrospectedTable introspectedTable) {
+                                        IntrospectedTable introspectedTable) {
         if (suppressAllComments) {
             return;
         }
@@ -341,8 +340,8 @@ public class DefaultCommentGenerator implements CommentGenerator {
 
     @Override
     public void addGetterComment(Method method,
-            IntrospectedTable introspectedTable,
-            IntrospectedColumn introspectedColumn) {
+                                 IntrospectedTable introspectedTable,
+                                 IntrospectedColumn introspectedColumn) {
         if (suppressAllComments) {
             return;
         }
@@ -375,8 +374,8 @@ public class DefaultCommentGenerator implements CommentGenerator {
 
     @Override
     public void addSetterComment(Method method,
-            IntrospectedTable introspectedTable,
-            IntrospectedColumn introspectedColumn) {
+                                 IntrospectedTable introspectedTable,
+                                 IntrospectedColumn introspectedColumn) {
         if (suppressAllComments) {
             return;
         }
@@ -412,7 +411,7 @@ public class DefaultCommentGenerator implements CommentGenerator {
 
     @Override
     public void addGeneralMethodAnnotation(Method method, IntrospectedTable introspectedTable,
-            Set<FullyQualifiedJavaType> imports) {
+                                           Set<FullyQualifiedJavaType> imports) {
         imports.add(new FullyQualifiedJavaType("javax.annotation.Generated")); //$NON-NLS-1$
         String comment = "Source Table: " + introspectedTable.getFullyQualifiedTable().toString(); //$NON-NLS-1$
         method.addAnnotation(getGeneratedAnnotation(comment));
@@ -420,7 +419,7 @@ public class DefaultCommentGenerator implements CommentGenerator {
 
     @Override
     public void addGeneralMethodAnnotation(Method method, IntrospectedTable introspectedTable,
-            IntrospectedColumn introspectedColumn, Set<FullyQualifiedJavaType> imports) {
+                                           IntrospectedColumn introspectedColumn, Set<FullyQualifiedJavaType> imports) {
         imports.add(new FullyQualifiedJavaType("javax.annotation.Generated")); //$NON-NLS-1$
         String comment = "Source field: " //$NON-NLS-1$
                 + introspectedTable.getFullyQualifiedTable().toString()
@@ -431,7 +430,7 @@ public class DefaultCommentGenerator implements CommentGenerator {
 
     @Override
     public void addFieldAnnotation(Field field, IntrospectedTable introspectedTable,
-            Set<FullyQualifiedJavaType> imports) {
+                                   Set<FullyQualifiedJavaType> imports) {
         imports.add(new FullyQualifiedJavaType("javax.annotation.Generated")); //$NON-NLS-1$
         String comment = "Source Table: " + introspectedTable.getFullyQualifiedTable().toString(); //$NON-NLS-1$
         field.addAnnotation(getGeneratedAnnotation(comment));
@@ -439,7 +438,7 @@ public class DefaultCommentGenerator implements CommentGenerator {
 
     @Override
     public void addFieldAnnotation(Field field, IntrospectedTable introspectedTable,
-            IntrospectedColumn introspectedColumn, Set<FullyQualifiedJavaType> imports) {
+                                   IntrospectedColumn introspectedColumn, Set<FullyQualifiedJavaType> imports) {
         imports.add(new FullyQualifiedJavaType("javax.annotation.Generated")); //$NON-NLS-1$
         String comment = "Source field: " //$NON-NLS-1$
                 + introspectedTable.getFullyQualifiedTable().toString()
@@ -463,7 +462,7 @@ public class DefaultCommentGenerator implements CommentGenerator {
 
     @Override
     public void addClassAnnotation(InnerClass innerClass, IntrospectedTable introspectedTable,
-            Set<FullyQualifiedJavaType> imports) {
+                                   Set<FullyQualifiedJavaType> imports) {
         imports.add(new FullyQualifiedJavaType("javax.annotation.Generated")); //$NON-NLS-1$
         String comment = "Source Table: " + introspectedTable.getFullyQualifiedTable().toString(); //$NON-NLS-1$
         innerClass.addAnnotation(getGeneratedAnnotation(comment));
