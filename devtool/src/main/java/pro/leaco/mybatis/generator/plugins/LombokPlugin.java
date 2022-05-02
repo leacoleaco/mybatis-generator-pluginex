@@ -210,7 +210,7 @@ public class LombokPlugin extends BasePlugin {
             // @Data
             if (annotation.startsWith("@Data")) {
                 this.addAnnotation(topLevelClass, annotation);
-                if (topLevelClass.getSuperClass() != null) {
+                if (topLevelClass.getSuperClass().isPresent()) {
                     this.addAnnotation(topLevelClass, "@EqualsAndHashCode(callSuper = true)");
                     this.addAnnotation(topLevelClass, "@ToString(callSuper = true)");
                 }
